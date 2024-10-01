@@ -20,8 +20,8 @@ const GrantAdministrativeRights = ({ userData, fetchUserData }) => {
   const [adminNames, setAdminNames] = useState([]);
   const [adminPhones, setAdminPhones] = useState([]);
   const superAdmins = [
-    "bEXlzb7b9RZSRtcMLzXRlpj6C2w1",
-    "QlFbhvV1mBd745JDZLu6GbTOJg43",
+    "xQFZesjJMrbPVsV1Z2L2Chr1UDJ2",
+    "0gAS8XmIPZQZDyK8aAe9MdAvo3f1",
   ];
 
   useEffect(() => {
