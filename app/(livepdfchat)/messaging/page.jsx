@@ -207,7 +207,7 @@ const page = () => {
 
             <div className="w-full">
               <p className="text-small-regular text-slate-700">
-                {userData.user_name}
+                {userData.user_full_name}
               </p>
               <p className="text-subtle-regular text-slate-500 line-clamp-1">
                 {userData.user_field_of_study}
