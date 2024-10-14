@@ -30,8 +30,14 @@ const algoliaClient = algoliasearch(
 
 const indexName = "studentsIndex";
 
-const StudentsList = ({ data, userData, fetchUserData, sessionId }) => {
-  const [addedMemberIDs, setAddedMemberIDs] = useState([]);
+const StudentsList = ({
+  data,
+  userData,
+  fetchUserData,
+  invited,
+  sessionId,
+}) => {
+  const [addedMemberIDs, setAddedMemberIDs] = useState(invited);
 
   const handleRemoveUser = (post) => {
     setAddedMemberIDs((prev) => removeFromList(prev, post.user_id));
@@ -348,6 +354,7 @@ const AddMembersToGroup = ({ userData, fetchUserData, invited, sessionId }) => {
             data={students}
             userData={userData}
             fetchUserData={fetchUserData}
+            invited={invited}
             sessionId={sessionId}
           />
         </div>
