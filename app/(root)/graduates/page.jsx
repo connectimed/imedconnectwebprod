@@ -147,7 +147,7 @@ const StudentsList = ({ data, userData, fetchUserData }) => {
               <p>Registered: {calculateTimeAgo(post.user_creation_date)}</p>
             </div>
           </div>
-          {selectedPost && userData.user_type === "Admin" && (
+          {selectedPost && userData.user_type !== "Student" && (
             <dialog id="student_modal" className="modal">
               <div className="modal-box">
                 <div className="flex flex-row justify-center">
