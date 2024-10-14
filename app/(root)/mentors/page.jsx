@@ -87,7 +87,11 @@ const MentorsList = ({ data, userData, fetchUserData }) => {
             </div>
           </div>
           {selectedPost && userData.user_type === "Admin" && (
-            <AdminAllMentorsDialog selectedPost={selectedPost} />
+            <AdminAllMentorsDialog
+              selectedPost={selectedPost}
+              userData={userData}
+              fetchUserData={fetchUserData}
+            />
           )}
           {selectedPost && userData.user_type === "Student" && (
             <StudentAllMentorsDialog

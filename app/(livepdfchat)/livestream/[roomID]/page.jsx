@@ -42,11 +42,13 @@ const page = ({ params }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const dbInstance = collection(db, "Livestreams");
 
-  const myMeeting = async (element, userId, ownerId) => {
+  const myMeeting = async (element, userId, userType) => {
     const appId = +process.env.NEXT_PUBLIC_ZEGOCLOUD_APP_ID;
     const serverSecret = process.env.NEXT_PUBLIC_ZEGOCLOUD_SERVER_SECRET;
     const role =
-      ownerId === userId ? ZegoUIKitPrebuilt.Host : ZegoUIKitPrebuilt.Audience;
+      userType === "Admin" || userType === "Mentor"
+        ? ZegoUIKitPrebuilt.Host
+        : ZegoUIKitPrebuilt.Audience;
 
     const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
       appId,
@@ -208,9 +210,7 @@ const page = ({ params }) => {
         details.livestream_invited_users.includes(userData.user_id) && (
           <div
             className="w-full h-screen"
-            ref={(el) =>
-              myMeeting(el, userData.user_id, userData.livestream_owner)
-            }
+            ref={(el) => myMeeting(el, userData.user_id, userData.user_type)}
             style={{ width: "100vw", height: "100vh" }}
           >
             page
