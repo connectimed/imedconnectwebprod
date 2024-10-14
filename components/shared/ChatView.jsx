@@ -20,6 +20,7 @@ import {
   InfoButton,
   EllipsisButton,
   StarButton,
+  AddUserButton,
 } from "@chatscope/chat-ui-kit-react";
 import {
   addDoc,
@@ -43,6 +44,7 @@ import PrimaryButton from "./PrimaryButton";
 import CreateGroupChat from "./CreateGroupChat";
 import MessagesView from "./MessagesView";
 import CreateLivestream from "./CreateLivestream";
+import AddMembersToGroup from "./AddMembersToGroup";
 
 const ChatView = ({ userData, fetchUserData }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -334,11 +336,21 @@ const ChatView = ({ userData, fetchUserData }) => {
                 <ConversationHeader.Actions>
                   {(userData.user_type === "Admin" ||
                     userData.user_type === "Mentor") && (
-                    <VideoCallButton
-                      onClick={() =>
-                        document.getElementById("createls").showModal()
-                      }
-                    />
+                    <div>
+                      {selectedChatHead &&
+                        selectedChatHead.session_is_group && (
+                          <AddUserButton
+                            onClick={() =>
+                              document.getElementById("addMembers").showModal()
+                            }
+                          />
+                        )}
+                      <VideoCallButton
+                        onClick={() =>
+                          document.getElementById("createls").showModal()
+                        }
+                      />
+                    </div>
                   )}
                 </ConversationHeader.Actions>
               </ConversationHeader>
@@ -407,16 +419,29 @@ const ChatView = ({ userData, fetchUserData }) => {
         </MainContainer>
       </div>
       {selectedChatHead && (
-        <dialog id="createls" className="modal">
-          <div className="modal-box">
-            <CreateLivestream
-              userData={userData}
-              fetchUserData={fetchUserData}
-              invited={selectedChatHead.session_participants_ids}
-              sessionId={selectedChatHead.session_id}
-            />
-          </div>
-        </dialog>
+        <div>
+          <dialog id="addMembers" className="modal">
+            <div className="modal-box">
+              <AddMembersToGroup
+                userData={userData}
+                fetchUserData={fetchUserData}
+                invited={selectedChatHead.session_participants_ids}
+                sessionId={selectedChatHead.session_id}
+              />
+            </div>
+          </dialog>
+
+          <dialog id="createls" className="modal">
+            <div className="modal-box">
+              <CreateLivestream
+                userData={userData}
+                fetchUserData={fetchUserData}
+                invited={selectedChatHead.session_participants_ids}
+                sessionId={selectedChatHead.session_id}
+              />
+            </div>
+          </dialog>
+        </div>
       )}
     </div>
   );
