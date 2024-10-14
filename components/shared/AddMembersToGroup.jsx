@@ -91,10 +91,10 @@ const StudentsList = ({ data, userData, fetchUserData, sessionId }) => {
   };
 
   return (
-    <div className="flex flex-col space-y-2 h-96">
+    <div className="flex flex-col h-96 mt-2">
       {data.map((post) => (
         <div key={post.id}>
-          <div className="border border-slate-200 rounded-xl bg-white py-4 px-4">
+          <div className="border border-slate-200 rounded-lg bg-white py-2 px-3 my-2">
             <div className="flex flex-row justify-between">
               <div className="flex flex-row space-x-2">
                 <Image
