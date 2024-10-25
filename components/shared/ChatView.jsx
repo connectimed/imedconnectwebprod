@@ -278,7 +278,11 @@ const ChatView = ({ userData, fetchUserData }) => {
                         )
                   }
                   unreadDot={
-                    !post.session_last_text_seen_by.includes(userData.user_id)
+                    !post.session_last_text_seen_by
+                      ? false
+                      : !post.session_last_text_seen_by.includes(
+                          userData.user_id
+                        )
                   }
                   onClick={() => {
                     setSelectedChatHead(post);
