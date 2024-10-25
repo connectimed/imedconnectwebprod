@@ -51,53 +51,6 @@ const StudentEnrollToModule = ({
         user_modules_completed: 50,
       });
 
-      // create chat head
-      const docRef = doc(messagingRef, moduleId);
-      const docSnapshot = await getDoc(docRef);
-
-      if (docSnapshot.exists()) {
-        // Update the existing document
-        await updateDoc(docRef, {
-          session_participants_ids: arrayUnion(userData.user_id),
-          session_group_name: moduleTitle,
-          session_last_interaction: serverTimestamp(),
-          session_participants_names: arrayUnion(
-            `${userData.user_id}-${userData.user_full_name}`
-          ),
-          session_participants_profiles: arrayUnion(
-            `${userData.user_id}-${userData.user_image}`
-          ),
-          session_participants_types: arrayUnion(
-            `${userData.user_id}-${userData.user_type}`
-          ),
-        });
-      } else {
-        // Create a new document
-        await setDoc(docRef, {
-          session_id: moduleId,
-          session_is_group: true,
-          session_group_name: moduleTitle,
-          session_group_profile:
-            "https://firebasestorage.googleapis.com/v0/b/imed-connect-staging.appspot.com/o/Placeholders%2Fgroup-profile.jpg?alt=media&token=daaf9c10-9856-40c7-a422-bc338b181b42",
-          session_last_interaction: serverTimestamp(),
-          session_participants_ids: [userData.user_id],
-          session_participants_names: [
-            `${userData.user_id}-${userData.user_full_name}`,
-          ],
-          session_participants_profiles: [
-            `${userData.user_id}-${userData.user_image}`,
-          ],
-          session_participants_types: [
-            `${userData.user_id}-${userData.user_type}`,
-          ],
-          session_last_text: "Be the first to send a message.",
-          session_last_text_seen_by: [],
-          session_blocked_users: [],
-          session_read_only_users: [],
-          session_admins: [],
-        });
-      }
-
       setIsSubmitting(false);
       fetchUserData(userData.user_id);
     } catch (error) {
