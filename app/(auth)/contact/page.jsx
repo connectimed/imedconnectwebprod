@@ -13,6 +13,8 @@ const page = () => {
   const [message, setMessage] = useState("");
   const [messageSent, setMessageSent] = useState(false);
 
+  //Minor changes
+
   const handleNameChange = (e) => {
     setName(e.target.value);
   };
