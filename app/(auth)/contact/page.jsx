@@ -1,16 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { UserAuth } from "@/lib/context/AuthContext";
-import Image from "next/image";
-import Link from "next/link";
-
-import { auth, db } from "@/lib/firebase/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import ErrorBody from "@/components/shared/ErrorBody";
-import RingLoader from "@/components/shared/RingLoader";
-import FunderLogo from "@/components/shared/FunderLogo";
-import { sub } from "date-fns";
 import SuccessBody from "@/components/shared/SuccessBody";
 
 const page = () => {
