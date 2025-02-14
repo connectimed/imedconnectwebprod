@@ -61,7 +61,7 @@ const GenerateMentorsSheet = ({ userData, fetchUserData }) => {
           "Has Mentorship Experience": data.user_mentorship_interested,
           "Areas Of Interest": data.user_areas_of_interest,
           "Areas Of Expertise": data.user_areas_of_expertise.join(", "),
-          Availability: data.user_timing.join(", "),
+          Availability: data.user_available_times.join(", "),
           "Registered On": calculateDateAndTime(data.user_creation_date),
         };
       });
