@@ -2,6 +2,7 @@ import {
   collection,
   doc,
   getDocs,
+  limit,
   orderBy,
   query,
   updateDoc,
@@ -140,7 +141,8 @@ const StudentQuestions = ({ userData, module, examId, fetchUserData }) => {
     let q = query(
       dbInstance,
       where("question_parent_module", "==", module.module_id),
-      orderBy("question_posted_time")
+      orderBy("question_posted_time"),
+      limit(10)
     );
 
     setLoading(true);
