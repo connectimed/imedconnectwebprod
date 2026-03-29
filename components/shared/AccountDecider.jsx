@@ -124,6 +124,33 @@ const AccountDecider = ({ userData }) => {
                   alt="icon"
                 />
               </div>
+
+              <div
+                className={`flex flex-row border border-slate-300 rounded-lg py-2 px-3 mt-4 cursor-pointer ${
+                  selectedType === "Entrepreneur" ? "border-primary-light" : ""
+                }`}
+                onClick={() => handleSelectType("Entrepreneur")}
+              >
+                <div className="">
+                  <p className=" text-small-regular font-bold text-black">
+                    Entrepreneur / MSME
+                  </p>
+                  <p className=" text-small-regular text-gray-600">
+                    Access resources and connect with support networks to grow your business.
+                  </p>
+                </div>
+                <Image
+                  className="h-4 w-4"
+                  src={
+                    selectedType === "Entrepreneur"
+                      ? "/icons/selected.svg"
+                      : "/icons/unselected.svg"
+                  }
+                  height={512}
+                  width={512}
+                  alt="icon"
+                />
+              </div>
               <div className="mx-auto mt-6">
                 <div className="w-full">
                   <button
