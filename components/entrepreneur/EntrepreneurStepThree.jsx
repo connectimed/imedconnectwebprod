@@ -116,6 +116,8 @@ const EntrepreneurStepThree = ({ userData }) => {
       setLoading(false);
     } catch (err) {
       console.error("Error updating data:", err);
+      setError("Something went wrong. Please try again.");
+      setTimeout(() => setError(""), 3000);
       setLoading(false);
     }
   };
@@ -174,7 +176,10 @@ const EntrepreneurStepThree = ({ userData }) => {
               <ChoiceChips
                 choices={sectors}
                 selectedChoice={sector}
-                onSelectChoice={setSector}
+                onSelectChoice={(val) => {
+                  setSector(val);
+                  if (val !== "Agriculture") setValueChains([]);
+                }}
               />
 
               {sector === "Agriculture" && (
