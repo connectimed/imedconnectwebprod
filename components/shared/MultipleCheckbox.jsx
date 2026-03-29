@@ -4,6 +4,9 @@ import React, { useState } from "react";
 const MultipleCheckbox = ({ options, selectedValues, onSelect }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  const getLabel = (o) => (typeof o === "object" ? o.label : o);
+  const getValue = (o) => (typeof o === "object" ? o.value : o);
+
   const handleSelection = (value) => {
     if (selectedValues.includes(value)) {
       onSelect(selectedValues.filter((item) => item !== value));
@@ -26,15 +29,15 @@ const MultipleCheckbox = ({ options, selectedValues, onSelect }) => {
         <ul className="absolute z-10 mt-1 w-full bg-white border border-slate-300 rounded-lg shadow-lg text-small-regular max-h-48 overflow-scroll">
           {options.map((option) => (
             <li
-              key={option}
-              onClick={() => handleSelection(option)}
-              className={`px-4 py-2 cursor-pointer hover:bg-gray-200 `}
+              key={getValue(option)}
+              onClick={() => handleSelection(getValue(option))}
+              className="px-4 py-2 cursor-pointer hover:bg-gray-200"
             >
               <div className="flex flex-row space-x-2 items-center">
                 <Image
                   className="h-4 w-4"
                   src={
-                    selectedValues.includes(option)
+                    selectedValues.includes(getValue(option))
                       ? "/icons/checked.svg"
                       : "/icons/unchecked.svg"
                   }
@@ -42,7 +45,7 @@ const MultipleCheckbox = ({ options, selectedValues, onSelect }) => {
                   width={512}
                   alt="icon"
                 />
-                <p>{option}</p>
+                <p>{getLabel(option)}</p>
               </div>
             </li>
           ))}
