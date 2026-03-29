@@ -79,7 +79,7 @@ const page = () => {
   return (
     <div className="flex w-full h-screen flex-wrap bg-primary-deep-dark">
       <div className="flex w-full h-full flex-col justify-center md:w-1/2 lg:w-1/3">
-        <div className="flex flex-col overflow-auto px-6 py-6 sm:px-24 md:px-8 bg-primary-dark h-full md:ml-8 md:my-8 md:rounded-xl md:max-w-sm justify-center">
+        <div className="flex flex-col overflow-auto px-6 py-6 sm:px-24 md:px-8 bg-white/5 backdrop-blur-md border border-white/10 shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.18),inset_1px_0_1px_0_rgba(255,255,255,0.10)] h-full md:ml-8 md:my-8 md:rounded-xl md:max-w-sm justify-center">
           <Image
             src="/images/logo_tra.png"
             className="h-16 w-16 object-cover"
