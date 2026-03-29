@@ -136,6 +136,8 @@ const EntrepreneurStepFour = ({ userData }) => {
       setLoading(false);
     } catch (err) {
       console.error("Error updating data:", err);
+      setError("Something went wrong. Please try again.");
+      setTimeout(() => setError(""), 3000);
       setLoading(false);
     }
   };
