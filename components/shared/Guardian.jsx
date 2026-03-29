@@ -12,6 +12,8 @@ import MentorStepThree from "../mentor/MentorStepThree";
 import MentorStepFour from "../mentor/MentorStepFour";
 import MentorStepFive from "../mentor/MentorStepFive";
 import StudentStepFive from "../student/StudentStepFive";
+import EntrepreneurStepThree from "../entrepreneur/EntrepreneurStepThree";
+import EntrepreneurStepFour from "../entrepreneur/EntrepreneurStepFour";
 import EmploymentReadiness from "../student/EmploymentReadiness";
 import Employability from "../student/Employability";
 import StudentMentorEvaluation from "../student/evaluation/StudentMentorEvaluation";
@@ -108,6 +110,36 @@ export const Guardian = (userData, firebaseUser, fireLoaded) => {
     userData.user_profile_setup_step == "5"
   ) {
     return <MentorStepFive userData={userData} />;
+  }
+
+  //  Entrepreneur step two (reuses StudentStepTwo — same basic info needed)
+  if (
+    userData &&
+    firebaseUser &&
+    userData.user_type == "Entrepreneur" &&
+    userData.user_profile_setup_step == "2"
+  ) {
+    return <StudentStepTwo userData={userData} />;
+  }
+
+  //  Entrepreneur step three
+  if (
+    userData &&
+    firebaseUser &&
+    userData.user_type == "Entrepreneur" &&
+    userData.user_profile_setup_step == "3"
+  ) {
+    return <EntrepreneurStepThree userData={userData} />;
+  }
+
+  //  Entrepreneur step four
+  if (
+    userData &&
+    firebaseUser &&
+    userData.user_type == "Entrepreneur" &&
+    userData.user_profile_setup_step == "4"
+  ) {
+    return <EntrepreneurStepFour userData={userData} />;
   }
 
   //  Step six
