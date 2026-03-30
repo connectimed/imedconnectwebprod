@@ -1,13 +1,17 @@
 import React from "react";
 
 const MultipleChoiceChips = ({ choices, selectedChoices, onSelectChoice }) => {
+  const getLabel = (c) => (typeof c === "object" ? c.label : c);
+  const getValue = (c) => (typeof c === "object" ? c.value : c);
+
   const handleSelectChoice = (choice) => {
-    if (choice === "None") {
+    const value = getValue(choice);
+    if (value === "None") {
       onSelectChoice(["None"]);
     } else {
-      const updatedChoices = selectedChoices.includes(choice)
-        ? selectedChoices.filter((selected) => selected !== choice)
-        : [...selectedChoices, choice].filter(
+      const updatedChoices = selectedChoices.includes(value)
+        ? selectedChoices.filter((selected) => selected !== value)
+        : [...selectedChoices, value].filter(
             (selected) => selected !== "None"
           );
       onSelectChoice(updatedChoices);
@@ -20,13 +24,13 @@ const MultipleChoiceChips = ({ choices, selectedChoices, onSelectChoice }) => {
         <div
           key={index}
           className={`px-4 py-1.5 border rounded-full cursor-pointer text-small-regular tracking-wide ${
-            selectedChoices.includes(choice)
+            selectedChoices.includes(getValue(choice))
               ? "bg-primary-light text-white"
               : "bg-gray-200 text-gray-500"
           }`}
           onClick={() => handleSelectChoice(choice)}
         >
-          {choice}
+          {getLabel(choice)}
         </div>
       ))}
     </div>

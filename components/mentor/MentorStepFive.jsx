@@ -10,50 +10,52 @@ import ChoiceChips from "../shared/ChoiceChips";
 import Modal from "../shared/Modal";
 import Interests from "./Interests";
 import MultipleCheckbox from "../shared/MultipleCheckbox";
-
-const interests = [
-  "Business Development and Entrepreneurship",
-  "Early Career Development and Counselling",
-  "Both areas",
-];
-
-const numbers = [
-  "Just one",
-  "2 - 5",
-  "5 - 10",
-  "10 - 20",
-  "20 - 50",
-  "50 and above",
-];
-
-const timings = [
-  "Anytime during working hours",
-  "Morning on weekdays",
-  "Afternoon on weekdays",
-  "Evening on weekdays",
-  "Morning on weekends",
-  "Afternoon on weekends",
-  "Evening on weekends",
-];
-
-const options = [
-  "Entrepreneurship development",
-  "Financial management and literacy",
-  "Investor readiness",
-  "Business Management Strategy and Governance",
-  "Business Modelling and Design thinking",
-  "Job searching skills",
-  "Marketing and selling skills",
-  "Online Gigs and Remote jobs",
-  "Communication and Relationship building",
-  "Fundraising and resource mobilization",
-  "Digital Skills",
-  "Innovation Management",
-  "Other",
-];
+import { useLanguage } from "@/lib/context/LanguageContext";
 
 const MentorStepFive = ({ userData }) => {
   const { fetchUserData, logOut, isLocalhost } = UserAuth();
+  const { t } = useLanguage();
+
+  const interests = [
+    { label: t("interest_business"), value: "Business Development and Entrepreneurship" },
+    { label: t("interest_career"),   value: "Early Career Development and Counselling" },
+    { label: t("interest_both"),     value: "Both areas" },
+  ];
+
+  const numbers = [
+    { label: t("mentee_one"),     value: "Just one" },
+    { label: t("mentee_2_5"),     value: "2 - 5" },
+    { label: t("mentee_5_10"),    value: "5 - 10" },
+    { label: t("mentee_10_20"),   value: "10 - 20" },
+    { label: t("mentee_20_50"),   value: "20 - 50" },
+    { label: t("mentee_50_plus"), value: "50 and above" },
+  ];
+
+  const timings = [
+    { label: t("timing_anytime"),           value: "Anytime during working hours" },
+    { label: t("timing_morning_weekday"),   value: "Morning on weekdays" },
+    { label: t("timing_afternoon_weekday"), value: "Afternoon on weekdays" },
+    { label: t("timing_evening_weekday"),   value: "Evening on weekdays" },
+    { label: t("timing_morning_weekend"),   value: "Morning on weekends" },
+    { label: t("timing_afternoon_weekend"), value: "Afternoon on weekends" },
+    { label: t("timing_evening_weekend"),   value: "Evening on weekends" },
+  ];
+
+  const options = [
+    { label: t("expertise_entrepreneurship"), value: "Entrepreneurship development" },
+    { label: t("expertise_finance"),          value: "Financial management and literacy" },
+    { label: t("expertise_investor"),         value: "Investor readiness" },
+    { label: t("expertise_biz_mgmt"),         value: "Business Management Strategy and Governance" },
+    { label: t("expertise_biz_model"),        value: "Business Modelling and Design thinking" },
+    { label: t("expertise_job_search"),       value: "Job searching skills" },
+    { label: t("expertise_marketing"),        value: "Marketing and selling skills" },
+    { label: t("expertise_online_gigs"),      value: "Online Gigs and Remote jobs" },
+    { label: t("expertise_communication"),    value: "Communication and Relationship building" },
+    { label: t("expertise_fundraising"),      value: "Fundraising and resource mobilization" },
+    { label: t("expertise_digital"),          value: "Digital Skills" },
+    { label: t("expertise_innovation"),       value: "Innovation Management" },
+    { label: t("expertise_other"),            value: "Other" },
+  ];
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [trainingChoice, setTrainingChoice] = useState("");
@@ -83,7 +85,7 @@ const MentorStepFive = ({ userData }) => {
 
   const saveData = async () => {
     if (expertise.length < 1) {
-      setError("Please select atleast one area of expertise.");
+      setError(t("mentor_step5_error_expertise"));
       setTimeout(() => {
         setError("");
       }, 2000);
@@ -158,10 +160,10 @@ const MentorStepFive = ({ userData }) => {
             <div className="mx-auto max-w-md text-center md:text-start px-6 py-6">
               <ProgressIndicator currentStep={6} />
               <h1 className="text-base-semibold font-bold sm:text-body1-bold text-primary-dark-blue mt-12">
-                Tell us your preferences.
+                {t("mentor_step5_heading")}
               </h1>{" "}
               <p className="mt-1 mb-2 text-gray-1 text-small-regular">
-                Select major  areas of interest in coaching and mentorship
+                {t("mentor_step5_interest_question")}
               </p>
               <Interests
                 options={interests}
@@ -169,7 +171,7 @@ const MentorStepFive = ({ userData }) => {
                 onSelect={handleInterestChange}
               />
               <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-                Select specific areas  of expertise (Tick all that apply)
+                {t("mentor_step5_expertise_question")}
               </p>
               <MultipleCheckbox
                 options={options}
@@ -177,7 +179,7 @@ const MentorStepFive = ({ userData }) => {
                 onSelect={handleSelectionChange}
               />
               <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-                How many mentees can you handle efficiently in a given time?
+                {t("mentor_step5_number_question")}
               </p>
               <Interests
                 options={numbers}
@@ -185,8 +187,7 @@ const MentorStepFive = ({ userData }) => {
                 onSelect={handleNumberChange}
               />
               <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-                What is your most preferred timing for providing mentorship
-                support to the beneficiaries? ( pick option you mostly prefer )
+                {t("mentor_step5_timing_question")}
               </p>
               <MultipleCheckbox
                 options={timings}
@@ -210,7 +211,7 @@ const MentorStepFive = ({ userData }) => {
                       width={20}
                       alt="image"
                     />
-                    <p>Back</p>
+                    <p>{t("back")}</p>
                   </button>
                 </div>
                 <div className="w-full">
@@ -229,7 +230,7 @@ const MentorStepFive = ({ userData }) => {
                       width={20}
                       alt="image"
                     />
-                    <p>Next</p>
+                    <p>{t("next")}</p>
                   </button>
                 </div>
               </div>
@@ -239,7 +240,7 @@ const MentorStepFive = ({ userData }) => {
                 </div>
               )}
               <div className=" mx-auto mt-10">
-                <TextButton text={"Log Out"} action={logOut} />
+                <TextButton text={t("log_out")} action={logOut} />
               </div>
             </div>
           </div>

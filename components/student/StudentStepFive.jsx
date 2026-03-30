@@ -10,30 +10,32 @@ import Interests from "../mentor/Interests";
 import ChoiceChips from "../shared/ChoiceChips";
 import MultipleChoiceChips from "../shared/MultipleChoiceChips";
 import MultipleCheckbox from "../shared/MultipleCheckbox";
-
-const timings = [
-  "Anytime during working hours",
-  "Morning on weekdays",
-  "Afternoon on weekdays",
-  "Evening on weekdays",
-  "Morning on weekends",
-  "Afternoon on weekends",
-  "Evening on weekends",
-];
-
-const sectors = [
-  "Agriculture, Agribusiness or Agro-processing",
-  "Transport and Logistics",
-  "Tourism and Hospitality",
-  "Construction",
-  "Information and Communication Technology",
-  "Agroforestry",
-  "Energy",
-  "Other",
-];
+import { useLanguage } from "@/lib/context/LanguageContext";
 
 const StudentStepFive = ({ userData }) => {
   const { fetchUserData, logOut, isLocalhost } = UserAuth();
+  const { t } = useLanguage();
+
+  const sectors = [
+    { label: t("sector_agriculture"), value: "Agriculture, Agribusiness or Agro-processing" },
+    { label: t("sector_transport"),   value: "Transport and Logistics" },
+    { label: t("sector_tourism"),     value: "Tourism and Hospitality" },
+    { label: t("sector_construction"),value: "Construction" },
+    { label: t("sector_ict"),         value: "Information and Communication Technology" },
+    { label: t("sector_agroforestry"),value: "Agroforestry" },
+    { label: t("sector_energy"),      value: "Energy" },
+    { label: t("sector_other"),       value: "Other" },
+  ];
+
+  const timings = [
+    { label: t("timing_anytime"),           value: "Anytime during working hours" },
+    { label: t("timing_morning_weekday"),   value: "Morning on weekdays" },
+    { label: t("timing_afternoon_weekday"), value: "Afternoon on weekdays" },
+    { label: t("timing_evening_weekday"),   value: "Evening on weekdays" },
+    { label: t("timing_morning_weekend"),   value: "Morning on weekends" },
+    { label: t("timing_afternoon_weekend"), value: "Afternoon on weekends" },
+    { label: t("timing_evening_weekend"),   value: "Evening on weekends" },
+  ];
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [sector, setSector] = useState("Construction");
@@ -54,7 +56,7 @@ const StudentStepFive = ({ userData }) => {
 
   const saveData = async () => {
     if (device.length < 1) {
-      setError("Please select device.");
+      setError(t("student_step5_error_device"));
       setTimeout(() => {
         setError("");
       }, 2000);
@@ -113,11 +115,10 @@ const StudentStepFive = ({ userData }) => {
               <ProgressIndicator currentStep={6} />
 
               <h1 className="text-base-semibold font-bold sm:text-body1-bold text-primary-dark-blue mt-12">
-                Tell us your preference.
+                {t("student_step5_heading")}
               </h1>
               <p className="mt-1 mb-2 text-gray-1 text-small-regular">
-                Which sector do you prefer to specialize in your career
-                endeavors?
+                {t("student_step5_sector_question")}
               </p>
               <Interests
                 options={sectors}
@@ -126,8 +127,7 @@ const StudentStepFive = ({ userData }) => {
               />
 
               <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-                What is your most preferred timing for providing mentorship
-                support to the beneficiaries? ( pick option you mostly prefer )
+                {t("student_step5_timing_question")}
               </p>
               <MultipleCheckbox
                 options={timings}
@@ -136,11 +136,16 @@ const StudentStepFive = ({ userData }) => {
               />
 
               <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-                Which devices do you use to access online information?
+                {t("student_step5_device_question")}
               </p>
               <div className="">
                 <MultipleChoiceChips
-                  choices={["Smartphone", "Computer", "Tablet", "None"]}
+                  choices={[
+                    { label: t("device_smartphone"), value: "Smartphone" },
+                    { label: t("device_computer"),   value: "Computer" },
+                    { label: t("device_tablet"),     value: "Tablet" },
+                    { label: t("device_none"),       value: "None" },
+                  ]}
                   selectedChoices={device}
                   onSelectChoice={handleSelectChoice}
                 />
@@ -163,7 +168,7 @@ const StudentStepFive = ({ userData }) => {
                       width={20}
                       alt="image"
                     />
-                    <p>Back</p>
+                    <p>{t("back")}</p>
                   </button>
                 </div>
                 <div className="w-full">
@@ -182,7 +187,7 @@ const StudentStepFive = ({ userData }) => {
                       width={20}
                       alt="image"
                     />
-                    <p>Next</p>
+                    <p>{t("next")}</p>
                   </button>
                 </div>
               </div>
@@ -192,7 +197,7 @@ const StudentStepFive = ({ userData }) => {
                 </div>
               )}
               <div className=" mx-auto mt-10">
-                <TextButton text={"Log Out"} action={logOut} />
+                <TextButton text={t("log_out")} action={logOut} />
               </div>
             </div>
           </div>
