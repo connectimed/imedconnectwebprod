@@ -1,4 +1,5 @@
 import { AuthContextProvider } from "@/lib/context/AuthContext";
+import { LanguageProvider } from "@/lib/context/LanguageContext";
 import { Inter } from "next/font/google";
 import "../globals.css";
 
@@ -12,13 +13,15 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <AuthContextProvider>
-      <html lang="en" className={inter.className}>
-        <body>
-          <main className="h-screen">
-            <div className="w-full h-full">{children}</div>
-          </main>
-        </body>
-      </html>
+      <LanguageProvider>
+        <html lang="en" className={inter.className}>
+          <body>
+            <main className="h-screen">
+              <div className="w-full h-full">{children}</div>
+            </main>
+          </body>
+        </html>
+      </LanguageProvider>
     </AuthContextProvider>
   );
 }
