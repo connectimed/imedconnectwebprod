@@ -8,9 +8,11 @@ import ProgressIndicator from "../shared/ProgressIndicator";
 import ErrorBody from "../shared/ErrorBody";
 import TextButton from "../shared/TextButton";
 import DateInput from "../shared/DateInput";
+import { useLanguage } from "@/lib/context/LanguageContext";
 
 const StudentStepTwo = ({ userData }) => {
   const { firebaseUser, fetchUserData, logOut, isLocalhost } = UserAuth();
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [selectedType, setSelectedType] = useState("");
   const [error, setError] = useState("");
@@ -56,7 +58,7 @@ const StudentStepTwo = ({ userData }) => {
 
   const saveData = async () => {
     if (!day || !month || !year) {
-      setError("Please enter a valid date of birth");
+      setError(t("step2_error_dob"));
       setTimeout(() => {
         setError("");
       }, 2000);
@@ -65,7 +67,7 @@ const StudentStepTwo = ({ userData }) => {
 
     const dateOfBirth = new Date(year, month - 1, day);
     if (isNaN(dateOfBirth.getTime())) {
-      setError("Please enter a valid date of birth");
+      setError(t("step2_error_dob"));
       setTimeout(() => {
         setError("");
       }, 2000);
@@ -73,7 +75,7 @@ const StudentStepTwo = ({ userData }) => {
     }
 
     if (!selectedType) {
-      setError("Please select your sex");
+      setError(t("step2_error_sex"));
       setTimeout(() => {
         setError("");
       }, 2000);
@@ -83,7 +85,7 @@ const StudentStepTwo = ({ userData }) => {
     const phoneNumberRegex = /^\+?[1-9]\d{1,14}$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (phoneNumber && !phoneNumberRegex.test(phoneNumber)) {
-      setError("Please enter a valid phone number.");
+      setError(t("step2_error_phone"));
       setTimeout(() => {
         setError("");
       }, 2000);
@@ -91,7 +93,7 @@ const StudentStepTwo = ({ userData }) => {
     }
 
     if (!emailRegex.test(email)) {
-      setError("Please enter a valid email address.");
+      setError(t("step2_error_email"));
       setTimeout(() => {
         setError("");
       }, 2000);
@@ -155,11 +157,11 @@ const StudentStepTwo = ({ userData }) => {
               <ProgressIndicator currentStep={3} />
 
               <h1 className="text-base-semibold font-bold sm:text-body1-bold text-primary-dark-blue mt-10">
-                Tell us about you!
+                {t("step2_heading")}
               </h1>
 
               <p className="mt-1 mb-4 text-gray-1 text-small-regular">
-                What is your date of birth?
+                {t("step2_dob_question")}
               </p>
               <DateInput
                 day={day}
@@ -170,7 +172,7 @@ const StudentStepTwo = ({ userData }) => {
                 onYearChange={setYear}
               />
               <p className="mt-6 mb-3 text-gray-1 text-small-regular">
-                Please tell us your sex.
+                {t("step2_sex_question")}
               </p>
               <div className="flex flex-row space-x-4">
                 <div
@@ -181,7 +183,7 @@ const StudentStepTwo = ({ userData }) => {
                 >
                   <div className="flex flex-row justify-between w-full">
                     <p className=" text-small-regular font-bold text-black">
-                      Male
+                      {t("male")}
                     </p>
                     <Image
                       className="h-4 w-4"
@@ -205,7 +207,7 @@ const StudentStepTwo = ({ userData }) => {
                 >
                   <div className="flex flex-row justify-between w-full">
                     <p className=" text-small-regular font-bold text-black">
-                      Female
+                      {t("female")}
                     </p>
                     <Image
                       className="h-4 w-4"
@@ -225,26 +227,26 @@ const StudentStepTwo = ({ userData }) => {
               {/* alt start */}
 
               <p className="mt-4 mb-2 text-gray-1 text-small-regular">
-                Your alternative phone number
+                {t("step2_alt_phone_label")}
               </p>
               <div className="">
                 <input
                   type="text"
                   className="simple_textinput"
-                  placeholder="Eg: 255** *** ***"
+                  placeholder={t("step2_alt_phone_placeholder")}
                   value={phoneNumber}
                   onChange={handlePhoneChange}
                 />
               </div>
 
               <p className="mt-4 mb-2 text-gray-1 text-small-regular">
-                Your email address
+                {t("step2_email_label")}
               </p>
               <div className="">
                 <input
                   type="text"
                   className="simple_textinput"
-                  placeholder="Email address"
+                  placeholder={t("step2_email_placeholder")}
                   value={email}
                   onChange={handleEmailChange}
                 />
@@ -268,7 +270,7 @@ const StudentStepTwo = ({ userData }) => {
                       width={20}
                       alt="image"
                     />
-                    <p>Back</p>
+                    <p>{t("back")}</p>
                   </button>
                 </div>
                 <div className="w-full">
@@ -287,7 +289,7 @@ const StudentStepTwo = ({ userData }) => {
                       width={20}
                       alt="image"
                     />
-                    <p>Next</p>
+                    <p>{t("next")}</p>
                   </button>
                 </div>
               </div>
@@ -297,7 +299,7 @@ const StudentStepTwo = ({ userData }) => {
                 </div>
               )}
               <div className=" mx-auto mt-8">
-                <TextButton text={"Log Out"} action={logOut} />
+                <TextButton text={t("log_out")} action={logOut} />
               </div>
             </div>
           </div>
