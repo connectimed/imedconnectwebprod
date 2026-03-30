@@ -8,6 +8,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import ErrorBody from "@/components/shared/ErrorBody";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import FunderLogo from "@/components/shared/FunderLogo";
+import { useLanguage } from "@/lib/context/LanguageContext";
 
 const page = () => {
   const [loading, setLoading] = useState(false);
@@ -17,6 +18,7 @@ const page = () => {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const { t } = useLanguage();
   const placeholder =
     "https://firebasestorage.googleapis.com/v0/b/imed-connect.appspot.com/o/Placeholder%2Fuser.jpg?alt=media&token=029c60ae-2118-4616-a309-72e66907a3cd";
 
@@ -47,22 +49,22 @@ const page = () => {
   const handleRegister = async () => {
     const email = `255${phoneNumber}@gmail.com`;
     if (userName.trim().length < 4) {
-      setError("Enter your full name!");
+      setError(t("register_error_name"));
       setTimeout(() => {
         setError("");
       }, 2000);
     } else if (phoneNumber.length < 9) {
-      setError("Enter a valid phone number!");
+      setError(t("register_error_phone"));
       setTimeout(() => {
         setError("");
       }, 2000);
     } else if (phoneNumber.startsWith("0")) {
-      setError("Phone shouldn't start with 0!");
+      setError(t("register_error_phone_zero"));
       setTimeout(() => {
         setError("");
       }, 2000);
     } else if (password.length < 6) {
-      setError("Enter a strong password!");
+      setError(t("register_error_password"));
       setTimeout(() => {
         setError("");
       }, 2000);
@@ -84,9 +86,9 @@ const page = () => {
           const errorCode = error.code;
           const errorMessage = error.message;
           if (errorCode === "auth/email-already-in-use") {
-            setError(`Phone number already in use.`);
+            setError(t("register_error_phone_in_use"));
           } else {
-            setError(`Error! Check and try again.`);
+            setError(t("register_error_generic"));
           }
           setTimeout(() => {
             setError("");
@@ -203,7 +205,7 @@ const page = () => {
           <div className="flex flex-row text-small-regular gap-2 font-medium tracking-wider mt-6">
             <p className=" text-white">IMED Connect</p>
             <p className="text-slate-400">|</p>
-            <p className="text-slate-400">Register</p>
+            <p className="text-slate-400">{t("register_subtitle")}</p>
           </div>
 
           {/* <p className="mt-8 text-white text-heading4-medium tracking-wide">
@@ -213,7 +215,7 @@ const page = () => {
           </p> */}
 
           <p className="mt-2 text-slate-400 text-small-regular tracking-wide">
-            Also available on android and ios.
+            {t("app_tagline")}
           </p>
 
           <div className="mt-6 sm:mx-auto sm:w-full">
@@ -229,7 +231,7 @@ const page = () => {
                 <input
                   type="text"
                   className="w-full bg-transparent border rounded-md border-gray-300 px-4 py-2 text-white outline-slate-300 focus:border-primary-light focus:outline-none placeholder:text-slate-400"
-                  placeholder="Your name"
+                  placeholder={t("your_name")}
                   disabled={loading}
                   value={userName}
                   onChange={handleUserNameChange}
@@ -242,7 +244,7 @@ const page = () => {
                 <input
                   type="text"
                   className="w-full bg-transparent border rounded-md border-gray-300 px-4 py-2 ps-16 text-white outline-slate-300 focus:border-primary-light focus:outline-none placeholder:text-slate-400"
-                  placeholder="Phone number"
+                  placeholder={t("phone_number")}
                   disabled={loading}
                   value={phoneNumber}
                   onChange={handlePhoneNumberChange}
@@ -254,7 +256,7 @@ const page = () => {
                   <input
                     type={showPassword ? "text" : "password"}
                     className="w-full py-2 pe-12 !bg-transparent border rounded-md border-gray-300 px-4 text-white outline-slate-300 focus:border-primary-light focus:outline-none placeholder:text-slate-400"
-                    placeholder="Password"
+                    placeholder={t("password")}
                     value={password}
                     disabled={loading}
                     onChange={handlePasswordChange}
@@ -298,7 +300,7 @@ const page = () => {
                     alt="image"
                     width={20}
                   />
-                  <p>Register Now</p>
+                  <p>{t("register_btn")}</p>
                 </button>
               </div>
             </form>
@@ -310,12 +312,12 @@ const page = () => {
             )}
 
             <p className="mt-6 text-start text-small-regular text-white tracking-wider">
-              Already a member?{" "}
+              {t("already_member")}{" "}
               <Link
                 href="/sign-in"
                 className="leading-6 text-primary-deep-light"
               >
-                Sign In
+                {t("sign_in")}
               </Link>
             </p>
           </div>

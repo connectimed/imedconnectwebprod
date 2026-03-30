@@ -9,6 +9,7 @@ import { auth, db } from "@/lib/firebase/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import ErrorBody from "@/components/shared/ErrorBody";
 import FunderLogo from "@/components/shared/FunderLogo";
+import { useLanguage } from "@/lib/context/LanguageContext";
 
 const page = () => {
   const [loading, setLoading] = useState(false);
@@ -18,6 +19,7 @@ const page = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const { t } = useLanguage();
 
   const handlePhoneNumberChange = (e) => {
     const value = e.target.value;
@@ -47,7 +49,7 @@ const page = () => {
     e.preventDefault();
     const email = `255${phoneNumber}@gmail.com`;
     if (phoneNumber.length < 9 || password.length < 6) {
-      setError("Please fill everything!");
+      setError(t("signin_error_fill"));
       setTimeout(() => {
         setError("");
       }, 2000);
@@ -64,7 +66,7 @@ const page = () => {
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          setError("Incorrect credentials!");
+          setError(t("signin_error_credentials"));
           setTimeout(() => {
             setError("");
           }, 2000);
@@ -89,7 +91,7 @@ const page = () => {
           <div className="flex flex-row text-small-regular gap-2 font-medium tracking-wider mt-6">
             <p className=" text-white">IMED Connect</p>
             <p className="text-slate-400">|</p>
-            <p className="text-slate-400">Sign In</p>
+            <p className="text-slate-400">{t("signin_subtitle")}</p>
           </div>
 
           {/* <p className="mt-8 text-white text-heading4-medium tracking-wide">
@@ -99,7 +101,7 @@ const page = () => {
           </p> */}
 
           <p className="mt-2 text-slate-400 text-small-regular tracking-wide">
-            Also available on android and ios.
+            {t("app_tagline")}
           </p>
 
           <div className="mt-6 sm:mx-auto sm:w-full">
@@ -114,7 +116,7 @@ const page = () => {
                 <input
                   type="text"
                   className="w-full bg-transparent border rounded-md border-gray-300 px-4 py-2 ps-16 text-white outline-slate-300 focus:border-primary-light focus:outline-none placeholder:text-slate-400"
-                  placeholder="Phone number"
+                  placeholder={t("phone_number")}
                   disabled={loading}
                   value={phoneNumber}
                   onChange={handlePhoneNumberChange}
@@ -126,7 +128,7 @@ const page = () => {
                   <input
                     type={showPassword ? "text" : "password"}
                     className="w-full py-2 pe-12 !bg-transparent border rounded-md border-gray-300 px-4 text-white outline-slate-300 focus:border-primary-light focus:outline-none placeholder:text-slate-400"
-                    placeholder="Password"
+                    placeholder={t("password")}
                     value={password}
                     disabled={loading}
                     onChange={handlePasswordChange}
@@ -149,7 +151,7 @@ const page = () => {
                     href="/reset"
                     className="text-small-regular text-slate-400"
                   >
-                    Forgot password?
+                    {t("forgot_password")}
                   </Link>
                 </div>
               </div>
@@ -170,7 +172,7 @@ const page = () => {
                     alt="image"
                     width={20}
                   />
-                  <p>Sign In</p>
+                  <p>{t("sign_in")}</p>
                 </button>
               </div>
             </form>
@@ -182,12 +184,12 @@ const page = () => {
             )}
 
             <p className="mt-6 text-start text-small-regular text-white tracking-wider">
-              Not a member?{" "}
+              {t("not_a_member")}{" "}
               <Link
                 href="/register"
                 className="leading-6 text-primary-deep-light"
               >
-                Register
+                {t("register")}
               </Link>
             </p>
           </div>

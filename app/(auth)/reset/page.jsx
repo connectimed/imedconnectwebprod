@@ -10,6 +10,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import ErrorBody from "@/components/shared/ErrorBody";
 import RingLoader from "@/components/shared/RingLoader";
 import FunderLogo from "@/components/shared/FunderLogo";
+import { useLanguage } from "@/lib/context/LanguageContext";
 
 const page = () => {
   const [loading, setLoading] = useState(false);
@@ -21,6 +22,7 @@ const page = () => {
   const [digits, setDigits] = useState("");
   const router = useRouter();
   const [otp, setOtp] = useState("");
+  const { t } = useLanguage();
 
   const apiEndpoint = isLocalhost
     ? "http://localhost:3000/api/verify"
@@ -44,7 +46,7 @@ const page = () => {
       setPhoneVerified(true);
       generateResetLink();
     } else if (value.length === 6 && value !== otp) {
-      setError("Wrong code");
+      setError(t("reset_error_wrong_code"));
     } else {
       setError("");
     }
@@ -86,7 +88,7 @@ const page = () => {
 
   const sendOtp = async () => {
     if (phoneNumber.length < 9) {
-      setError("Enter valid phone number!");
+      setError(t("reset_error_phone"));
     } else {
       setLoading(true);
       setError(null);
@@ -136,7 +138,7 @@ const page = () => {
           <div className="flex flex-row text-small-regular gap-2 font-medium tracking-wider mt-6">
             <p className=" text-white">IMED Connect</p>
             <p className="text-slate-400">|</p>
-            <p className="text-slate-400">Reset password</p>
+            <p className="text-slate-400">{t("reset_subtitle")}</p>
           </div>
           {/* <p className="mt-8 text-white text-heading4-medium tracking-wide">
             Reset password
@@ -145,7 +147,7 @@ const page = () => {
           </p> */}
 
           <p className="mt-2 text-slate-400 text-small-regular tracking-wide">
-            Also available on android and ios.
+            {t("app_tagline")}
           </p>
 
           <div className="mt-6 sm:mx-auto sm:w-full">
@@ -161,7 +163,7 @@ const page = () => {
                 <input
                   type="text"
                   className="w-full bg-transparent border rounded-md border-gray-300 px-4 py-2 ps-16 text-white outline-slate-300 focus:border-primary-light focus:outline-none placeholder:text-slate-400"
-                  placeholder="Phone number"
+                  placeholder={t("phone_number")}
                   disabled={loading}
                   value={phoneNumber}
                   onChange={handlePhoneNumberChange}
@@ -173,7 +175,7 @@ const page = () => {
                   <input
                     type="text"
                     className="w-full bg-transparent border rounded-md border-gray-300 px-4 py-2 text-white outline-slate-300 focus:border-primary-light focus:outline-none placeholder:text-slate-400"
-                    placeholder="Six digits code"
+                    placeholder={t("six_digits_code")}
                     value={digits}
                     maxLength={6}
                     disabled={loading}
@@ -199,7 +201,7 @@ const page = () => {
                       alt="image"
                       width={20}
                     />
-                    <p>Send OTP</p>
+                    <p>{t("send_otp")}</p>
                   </button>
                 </div>
               )}
@@ -208,12 +210,12 @@ const page = () => {
             {error && <ErrorBody error={error} />}
 
             <p className="mt-6 text-start text-small-regular text-white tracking-wider">
-              Ready to continue?{" "}
+              {t("ready_to_continue")}{" "}
               <Link
                 href="/sign-in"
                 className="leading-6 text-primary-deep-light"
               >
-                Sign In
+                {t("sign_in")}
               </Link>
             </p>
           </div>
