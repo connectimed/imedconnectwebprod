@@ -7,9 +7,11 @@ import ProgressIndicator from "../shared/ProgressIndicator";
 import ErrorBody from "../shared/ErrorBody";
 import TextButton from "../shared/TextButton";
 import ChoiceChips from "../shared/ChoiceChips";
+import { useLanguage } from "@/lib/context/LanguageContext";
 
 const StudentStepThree = ({ userData }) => {
   const { fetchUserData, logOut, isLocalhost } = UserAuth();
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [maritalStatus, setMaritalStatus] = useState("");
@@ -22,14 +24,14 @@ const StudentStepThree = ({ userData }) => {
 
   const saveData = async () => {
     if (!maritalStatus) {
-      setError("Please select your marital status");
+      setError(t("student_step3_error_marital"));
       setTimeout(() => {
         setError("");
       }, 2000);
       return;
     }
     if (location.length < 10) {
-      setError("Please enter a valid location");
+      setError(t("student_step3_error_location"));
       setTimeout(() => {
         setError("");
       }, 2000);
@@ -87,28 +89,33 @@ const StudentStepThree = ({ userData }) => {
               <ProgressIndicator currentStep={4} />
 
               <h1 className="text-base-semibold font-bold sm:text-body1-bold text-primary-dark-blue mt-12">
-                Tell us more!
+                {t("student_step3_heading")}
               </h1>
 
               <p className="mt-1 mb-3 text-gray-1 text-small-regular">
-                What is your marital status?
+                {t("student_step3_marital_question")}
               </p>
               <div className="">
                 <ChoiceChips
-                  choices={["Single", "Married", "Separated", "Widowed"]}
+                  choices={[
+                    { label: t("marital_single"),    value: "Single" },
+                    { label: t("marital_married"),   value: "Married" },
+                    { label: t("marital_separated"), value: "Separated" },
+                    { label: t("marital_widowed"),   value: "Widowed" },
+                  ]}
                   selectedChoice={maritalStatus}
                   onSelectChoice={setMaritalStatus}
                 />
               </div>
 
               <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-                Please tell us your location.
+                {t("student_step3_location_question")}
               </p>
               <div className="">
                 <input
                   type="text"
                   className="simple_textinput"
-                  placeholder="Eg: Dar Es Salaam, Kinondoni"
+                  placeholder={t("student_step3_location_placeholder")}
                   value={location}
                   onChange={handleLocationChange}
                 />
@@ -130,7 +137,7 @@ const StudentStepThree = ({ userData }) => {
                       width={20}
                       alt="image"
                     />
-                    <p>Back</p>
+                    <p>{t("back")}</p>
                   </button>
                 </div>
                 <div className="w-full">
@@ -149,7 +156,7 @@ const StudentStepThree = ({ userData }) => {
                       width={20}
                       alt="image"
                     />
-                    <p>Next</p>
+                    <p>{t("next")}</p>
                   </button>
                 </div>
               </div>
@@ -160,7 +167,7 @@ const StudentStepThree = ({ userData }) => {
                 </div>
               )}
               <div className=" mx-auto mt-10">
-                <TextButton text={"Log Out"} action={logOut} />
+                <TextButton text={t("log_out")} action={logOut} />
               </div>
             </div>
           </div>

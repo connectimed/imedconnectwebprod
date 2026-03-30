@@ -10,6 +10,7 @@ import locations from "@/constants/locations";
 import RegionsComboBox from "../shared/RegionsComboBox";
 import DistrictsComboBox from "../shared/DistrictsComboBox";
 import SingleOptionDropdown from "../shared/SingleOptionDropdown";
+import { useLanguage } from "@/lib/context/LanguageContext";
 
 const educationLevels = [
   "PhD",
@@ -26,6 +27,7 @@ const educationLevels = [
 
 const MentorStepThree = ({ userData }) => {
   const { fetchUserData, logOut, isLocalhost } = UserAuth();
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [educationLevel, setEducationLevel] = useState("Degree");
@@ -48,14 +50,14 @@ const MentorStepThree = ({ userData }) => {
 
   const saveData = async () => {
     if (fieldOfStudy.length < 10) {
-      setError("Please enter field of study");
+      setError(t("mentor_step3_error_field"));
       setTimeout(() => {
         setError("");
       }, 2000);
       return;
     }
     if (location.length < 10) {
-      setError("Please enter a valid location");
+      setError(t("mentor_step3_error_location"));
       setTimeout(() => {
         setError("");
       }, 2000);
@@ -114,40 +116,40 @@ const MentorStepThree = ({ userData }) => {
               <ProgressIndicator currentStep={4} />
 
               <h1 className="text-base-semibold font-bold sm:text-body1-bold text-primary-dark-blue mt-12">
-                Tell us more!
+                {t("mentor_step3_heading")}
               </h1>
 
               <p className="mt-1 mb-2 text-gray-1 text-small-regular">
-                What's your highest level of education?
+                {t("mentor_step3_level_question")}
               </p>
               <SingleOptionDropdown
-                label="Your highest level of education?"
+                label={t("mentor_step3_level_label")}
                 options={educationLevels}
                 selectedValue={educationLevel}
                 onSelect={handleEducationLevelChange}
               />
 
               <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-                What is your highest field of study?
+                {t("mentor_step3_field_question")}
               </p>
               <div className="">
                 <input
                   type="text"
                   className="simple_textinput"
-                  placeholder="Eg: Bachelor Degree in Linguistic"
+                  placeholder={t("mentor_step3_field_placeholder")}
                   value={fieldOfStudy}
                   onChange={handleFieldOfStudyChange}
                 />
               </div>
 
               <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-                Please tell us your location.
+                {t("mentor_step3_location_question")}
               </p>
               <div className="">
                 <input
                   type="text"
                   className="simple_textinput"
-                  placeholder="Eg: Dar Es Salaam, Kinondoni"
+                  placeholder={t("mentor_step3_location_placeholder")}
                   value={location}
                   onChange={handleLocationChange}
                 />
@@ -170,7 +172,7 @@ const MentorStepThree = ({ userData }) => {
                       width={20}
                       alt="image"
                     />
-                    <p>Back</p>
+                    <p>{t("back")}</p>
                   </button>
                 </div>
                 <div className="w-full">
@@ -189,7 +191,7 @@ const MentorStepThree = ({ userData }) => {
                       width={20}
                       alt="image"
                     />
-                    <p>Next</p>
+                    <p>{t("next")}</p>
                   </button>
                 </div>
               </div>
@@ -199,7 +201,7 @@ const MentorStepThree = ({ userData }) => {
                 </div>
               )}
               <div className=" mx-auto mt-10">
-                <TextButton text={"Log Out"} action={logOut} />
+                <TextButton text={t("log_out")} action={logOut} />
               </div>
             </div>
           </div>
