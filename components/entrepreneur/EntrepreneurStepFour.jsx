@@ -8,35 +8,37 @@ import TextButton from "../shared/TextButton";
 import ChoiceChips from "../shared/ChoiceChips";
 import MultipleCheckbox from "../shared/MultipleCheckbox";
 import SingleOptionDropdown from "../shared/SingleOptionDropdown";
-
-const revenueRanges = [
-  "Below TZS 500,000",
-  "TZS 500,001 – 2,000,000",
-  "TZS 2,000,001 – 5,000,000",
-  "Above TZS 5,000,000",
-];
-
-const challengeOptions = [
-  "Access to finance",
-  "Markets",
-  "Skills",
-  "Technology",
-  "Regulations",
-  "Climate change",
-  "Other",
-];
-
-const supportOptions = [
-  "Business training",
-  "Mentorship",
-  "Market linkages",
-  "Access to finance",
-  "Networking",
-  "Other",
-];
+import { useLanguage } from "@/lib/context/LanguageContext";
 
 const EntrepreneurStepFour = ({ userData }) => {
   const { fetchUserData, logOut } = UserAuth();
+  const { t } = useLanguage();
+
+  const revenueRanges = [
+    "Below TZS 500,000",
+    "TZS 500,001 – 2,000,000",
+    "TZS 2,000,001 – 5,000,000",
+    "Above TZS 5,000,000",
+  ];
+
+  const challengeOptions = [
+    { label: t("challenge_finance"),     value: "Access to finance" },
+    { label: t("challenge_markets"),     value: "Markets" },
+    { label: t("challenge_skills"),      value: "Skills" },
+    { label: t("challenge_technology"),  value: "Technology" },
+    { label: t("challenge_regulations"), value: "Regulations" },
+    { label: t("challenge_climate"),     value: "Climate change" },
+    { label: t("challenge_other"),       value: "Other" },
+  ];
+
+  const supportOptions = [
+    { label: t("support_training"),   value: "Business training" },
+    { label: t("support_mentorship"), value: "Mentorship" },
+    { label: t("support_market"),     value: "Market linkages" },
+    { label: t("support_finance"),    value: "Access to finance" },
+    { label: t("support_networking"), value: "Networking" },
+    { label: t("support_other"),      value: "Other" },
+  ];
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [employees, setEmployees] = useState("");
@@ -67,37 +69,37 @@ const EntrepreneurStepFour = ({ userData }) => {
 
   const saveData = async () => {
     if (!employees.trim()) {
-      setError("Please enter the number of employees.");
+      setError(t("ent_step4_error_employees"));
       setTimeout(() => setError(""), 2000);
       return;
     }
     if (challenges.length < 1) {
-      setError("Please select at least one main challenge.");
+      setError(t("ent_step4_error_challenges"));
       setTimeout(() => setError(""), 2000);
       return;
     }
     if (!receivedSupport) {
-      setError("Please indicate whether you have received business support before.");
+      setError(t("ent_step4_error_support"));
       setTimeout(() => setError(""), 2000);
       return;
     }
     if (receivedSupport === "Yes" && !supportOrg.trim()) {
-      setError("Please name the organisation or project that provided support.");
+      setError(t("ent_step4_error_support_org"));
       setTimeout(() => setError(""), 2000);
       return;
     }
     if (supportNeeded.length < 1) {
-      setError("Please select at least one type of support you are looking for.");
+      setError(t("ent_step4_error_support_needed"));
       setTimeout(() => setError(""), 2000);
       return;
     }
     if (!disability) {
-      setError("Please indicate whether you have any form of disability.");
+      setError(t("ent_step4_error_disability"));
       setTimeout(() => setError(""), 2000);
       return;
     }
     if (disability === "Yes" && !disabilityDesc.trim()) {
-      setError("Please describe your disability.");
+      setError(t("ent_step4_error_disability_desc"));
       setTimeout(() => setError(""), 2000);
       return;
     }
@@ -121,7 +123,7 @@ const EntrepreneurStepFour = ({ userData }) => {
       setLoading(false);
     } catch (err) {
       console.error("Error updating data:", err);
-      setError("Something went wrong. Please try again.");
+      setError(t("ent_step4_error_generic"));
       setTimeout(() => setError(""), 3000);
       setLoading(false);
     }
@@ -145,26 +147,25 @@ const EntrepreneurStepFour = ({ userData }) => {
   return (
     <div>
       <div className="mx-auto bg-white rounded-lg pt-4 pb-10">
-        <p className="text-heading3-bold px-6">Your Business Details</p>
+        <p className="text-heading3-bold px-6">{t("ent_step4_heading")}</p>
         <p className="text-small-regular text-gray-1 px-6">
-          This information helps us tailor support and resources to your specific needs.
-          All information remains confidential.
+          {t("ent_step4_subtitle")}
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 mt-4">
           <div className="flex flex-col px-6">
             <p className="mt-1 mb-2 text-gray-1 text-small-regular">
-              Number of employees (including yourself)
+              {t("ent_step4_employees_label")}
             </p>
             <input
               type="text"
               className="simple_textinput"
-              placeholder="Eg: 3"
+              placeholder={t("ent_step4_employees_placeholder")}
               value={employees}
               onChange={handleEmployeesChange}
             />
 
             <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-              Average monthly revenue (in TZS)
+              {t("ent_step4_revenue_label")}
             </p>
             <SingleOptionDropdown
               options={revenueRanges}
@@ -173,7 +174,7 @@ const EntrepreneurStepFour = ({ userData }) => {
             />
 
             <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-              Main challenges currently facing your business (select all that apply)
+              {t("ent_step4_challenges_label")}
             </p>
             <MultipleCheckbox
               options={challengeOptions}
@@ -182,22 +183,25 @@ const EntrepreneurStepFour = ({ userData }) => {
             />
 
             <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-              Have you received any business training or support before?
+              {t("ent_step4_support_received_label")}
             </p>
             <ChoiceChips
-              choices={["Yes", "No"]}
+              choices={[
+                { label: t("yes"), value: "Yes" },
+                { label: t("no"),  value: "No" },
+              ]}
               selectedChoice={receivedSupport}
               onSelectChoice={setReceivedSupport}
             />
             {receivedSupport === "Yes" && (
               <>
                 <p className="mt-4 mb-2 text-gray-1 text-small-regular">
-                  From which organisation or project?
+                  {t("ent_step4_support_org_label")}
                 </p>
                 <input
                   type="text"
                   className="simple_textinput"
-                  placeholder="Eg: TangaYetu, AGRA"
+                  placeholder={t("ent_step4_support_org_placeholder")}
                   value={supportOrg}
                   onChange={handleSupportOrgChange}
                 />
@@ -207,7 +211,7 @@ const EntrepreneurStepFour = ({ userData }) => {
 
           <div className="flex flex-col px-6">
             <p className="mt-5 md:mt-0 mb-2 text-gray-1 text-small-regular">
-              What kind of support are you looking for from IMED Connect? (select all that apply)
+              {t("ent_step4_support_needed_label")}
             </p>
             <MultipleCheckbox
               options={supportOptions}
@@ -216,33 +220,36 @@ const EntrepreneurStepFour = ({ userData }) => {
             />
 
             <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-              TIN / Business Registration Number (optional)
+              {t("ent_step4_tin_label")}
             </p>
             <input
               type="text"
               className="simple_textinput"
-              placeholder="Eg: 123-456-789"
+              placeholder={t("ent_step4_tin_placeholder")}
               value={tin}
               onChange={handleTinChange}
             />
 
             <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-              Do you have any form of disability?
+              {t("ent_step4_disability_label")}
             </p>
             <ChoiceChips
-              choices={["Yes", "No"]}
+              choices={[
+                { label: t("yes"), value: "Yes" },
+                { label: t("no"),  value: "No" },
+              ]}
               selectedChoice={disability}
               onSelectChoice={setDisability}
             />
             {disability === "Yes" && (
               <>
                 <p className="mt-4 mb-2 text-gray-1 text-small-regular">
-                  Please describe your disability
+                  {t("ent_step4_disability_desc_label")}
                 </p>
                 <input
                   type="text"
                   className="simple_textinput"
-                  placeholder="Describe"
+                  placeholder={t("ent_step4_disability_desc_placeholder")}
                   value={disabilityDesc}
                   onChange={handleDisabilityDescChange}
                 />
@@ -264,7 +271,7 @@ const EntrepreneurStepFour = ({ userData }) => {
                     width={20}
                     alt="loading"
                   />
-                  <p>Back</p>
+                  <p>{t("back")}</p>
                 </button>
               </div>
               <div className="w-full">
@@ -281,7 +288,7 @@ const EntrepreneurStepFour = ({ userData }) => {
                     width={20}
                     alt="loading"
                   />
-                  <p>Submit</p>
+                  <p>{t("submit")}</p>
                 </button>
               </div>
             </div>
@@ -292,7 +299,7 @@ const EntrepreneurStepFour = ({ userData }) => {
               </div>
             )}
             <div className="mx-auto mt-10">
-              <TextButton text={"Log Out"} action={logOut} />
+              <TextButton text={t("log_out")} action={logOut} />
             </div>
           </div>
         </div>

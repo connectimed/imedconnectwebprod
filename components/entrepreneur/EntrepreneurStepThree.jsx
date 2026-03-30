@@ -9,45 +9,47 @@ import TextButton from "../shared/TextButton";
 import ChoiceChips from "../shared/ChoiceChips";
 import MultipleCheckbox from "../shared/MultipleCheckbox";
 import SingleOptionDropdown from "../shared/SingleOptionDropdown";
-
-const sectors = [
-  "Agriculture",
-  "Livestock",
-  "Fishing",
-  "Processing",
-  "Services",
-  "Trade",
-  "Other",
-];
-
-const agriValueChains = [
-  "Maize",
-  "Rice",
-  "Sunflower",
-  "Horticulture (vegetables & fruits)",
-  "Poultry",
-  "Animal Keeping (livestock)",
-  "Cassava",
-  "Beans",
-  "Other",
-];
-
-const formalizationOptions = [
-  "Not registered",
-  "Registered through BRELA",
-  "Other Registrations (e.g. local authority, cooperative)",
-  "I have no business",
-];
-
-const yearsOptions = [
-  "Less than 1 year",
-  "1–3 years",
-  "4–5 years",
-  "More than 5 years",
-];
+import { useLanguage } from "@/lib/context/LanguageContext";
 
 const EntrepreneurStepThree = ({ userData }) => {
   const { fetchUserData, logOut } = UserAuth();
+  const { t } = useLanguage();
+
+  const sectors = [
+    { label: t("ent_sector_agriculture"), value: "Agriculture" },
+    { label: t("ent_sector_livestock"),   value: "Livestock" },
+    { label: t("ent_sector_fishing"),     value: "Fishing" },
+    { label: t("ent_sector_processing"),  value: "Processing" },
+    { label: t("ent_sector_services"),    value: "Services" },
+    { label: t("ent_sector_trade"),       value: "Trade" },
+    { label: t("ent_sector_other"),       value: "Other" },
+  ];
+
+  const agriValueChains = [
+    { label: t("vc_maize"),        value: "Maize" },
+    { label: t("vc_rice"),         value: "Rice" },
+    { label: t("vc_sunflower"),    value: "Sunflower" },
+    { label: t("vc_horticulture"), value: "Horticulture (vegetables & fruits)" },
+    { label: t("vc_poultry"),      value: "Poultry" },
+    { label: t("vc_livestock"),    value: "Animal Keeping (livestock)" },
+    { label: t("vc_cassava"),      value: "Cassava" },
+    { label: t("vc_beans"),        value: "Beans" },
+    { label: t("vc_other"),        value: "Other" },
+  ];
+
+  const formalizationOptions = [
+    { label: t("form_not_registered"), value: "Not registered" },
+    { label: t("form_brela"),          value: "Registered through BRELA" },
+    { label: t("form_other"),          value: "Other Registrations (e.g. local authority, cooperative)" },
+    { label: t("form_no_business"),    value: "I have no business" },
+  ];
+
+  const yearsOptions = [
+    "Less than 1 year",
+    "1–3 years",
+    "4–5 years",
+    "More than 5 years",
+  ];
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [businessName, setBusinessName] = useState("");
@@ -73,27 +75,27 @@ const EntrepreneurStepThree = ({ userData }) => {
 
   const saveData = async () => {
     if (!sector) {
-      setError("Please select your type of business.");
+      setError(t("ent_step3_error_sector"));
       setTimeout(() => setError(""), 2000);
       return;
     }
     if (mainActivity.length < 10) {
-      setError("Please describe your main business activity (at least 10 characters).");
+      setError(t("ent_step3_error_activity"));
       setTimeout(() => setError(""), 2000);
       return;
     }
     if (!formalization) {
-      setError("Please select your business formalization status.");
+      setError(t("ent_step3_error_formalization"));
       setTimeout(() => setError(""), 2000);
       return;
     }
     if (region.trim().length < 3) {
-      setError("Please enter your business region.");
+      setError(t("ent_step3_error_region"));
       setTimeout(() => setError(""), 2000);
       return;
     }
     if (district.trim().length < 3) {
-      setError("Please enter your business district.");
+      setError(t("ent_step3_error_district"));
       setTimeout(() => setError(""), 2000);
       return;
     }
@@ -116,7 +118,7 @@ const EntrepreneurStepThree = ({ userData }) => {
       setLoading(false);
     } catch (err) {
       console.error("Error updating data:", err);
-      setError("Something went wrong. Please try again.");
+      setError(t("ent_step3_error_generic"));
       setTimeout(() => setError(""), 3000);
       setLoading(false);
     }
@@ -153,25 +155,25 @@ const EntrepreneurStepThree = ({ userData }) => {
               <ProgressIndicator currentStep={4} />
 
               <h1 className="text-base-semibold font-bold sm:text-body1-bold text-primary-dark-blue mt-10">
-                Tell us about your business.
+                {t("ent_step3_heading")}
               </h1>
               <p className="mt-1 mb-4 text-gray-1 text-small-regular">
-                Help us understand your work so we can connect you with the right support.
+                {t("ent_step3_subtitle")}
               </p>
 
               <p className="mb-2 text-gray-1 text-small-regular">
-                Business name (if applicable)
+                {t("ent_step3_biz_name_label")}
               </p>
               <input
                 type="text"
                 className="simple_textinput"
-                placeholder="Eg: Kilimo Fresh Ltd"
+                placeholder={t("ent_step3_biz_name_placeholder")}
                 value={businessName}
                 onChange={(e) => setBusinessName(e.target.value.slice(0, 100))}
               />
 
               <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-                Type of business / sector
+                {t("ent_step3_sector_label")}
               </p>
               <ChoiceChips
                 choices={sectors}
@@ -185,7 +187,7 @@ const EntrepreneurStepThree = ({ userData }) => {
               {sector === "Agriculture" && (
                 <>
                   <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-                    Which agricultural value chain do you work with?
+                    {t("ent_step3_value_chain_question")}
                   </p>
                   <MultipleCheckbox
                     options={agriValueChains}
@@ -196,18 +198,18 @@ const EntrepreneurStepThree = ({ userData }) => {
               )}
 
               <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-                Main activity / core business — describe your main product or service
+                {t("ent_step3_activity_label")}
               </p>
               <textarea
                 rows={3}
                 className="simple_textinput max-h-32 min-h-24"
-                placeholder="Eg: Selling fresh vegetables directly to households in Dar es Salaam"
+                placeholder={t("ent_step3_activity_placeholder")}
                 value={mainActivity}
                 onChange={handleMainActivityChange}
               />
 
               <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-                Is your business formalized / registered?
+                {t("ent_step3_formalization_label")}
               </p>
               <ChoiceChips
                 choices={formalizationOptions}
@@ -216,7 +218,7 @@ const EntrepreneurStepThree = ({ userData }) => {
               />
 
               <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-                Years of business operation
+                {t("ent_step3_years_label")}
               </p>
               <SingleOptionDropdown
                 options={yearsOptions}
@@ -225,23 +227,23 @@ const EntrepreneurStepThree = ({ userData }) => {
               />
 
               <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-                Region where your business operates
+                {t("ent_step3_region_label")}
               </p>
               <input
                 type="text"
                 className="simple_textinput"
-                placeholder="Eg: Arusha"
+                placeholder={t("ent_step3_region_placeholder")}
                 value={region}
                 onChange={handleRegionChange}
               />
 
               <p className="mt-4 mb-2 text-gray-1 text-small-regular">
-                District where your business operates
+                {t("ent_step3_district_label")}
               </p>
               <input
                 type="text"
                 className="simple_textinput"
-                placeholder="Eg: Arumeru"
+                placeholder={t("ent_step3_district_placeholder")}
                 value={district}
                 onChange={handleDistrictChange}
               />
@@ -261,7 +263,7 @@ const EntrepreneurStepThree = ({ userData }) => {
                       width={20}
                       alt="loading"
                     />
-                    <p>Back</p>
+                    <p>{t("back")}</p>
                   </button>
                 </div>
                 <div className="w-full">
@@ -278,7 +280,7 @@ const EntrepreneurStepThree = ({ userData }) => {
                       width={20}
                       alt="loading"
                     />
-                    <p>Next</p>
+                    <p>{t("next")}</p>
                   </button>
                 </div>
               </div>
@@ -289,7 +291,7 @@ const EntrepreneurStepThree = ({ userData }) => {
                 </div>
               )}
               <div className="mx-auto mt-8">
-                <TextButton text={"Log Out"} action={logOut} />
+                <TextButton text={t("log_out")} action={logOut} />
               </div>
             </div>
           </div>
