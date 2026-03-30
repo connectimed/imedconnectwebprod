@@ -8,6 +8,7 @@ import ErrorBody from "../shared/ErrorBody";
 import TextButton from "../shared/TextButton";
 import YearInput from "../shared/YearInput";
 import SingleOptionDropdown from "../shared/SingleOptionDropdown";
+import { useLanguage } from "@/lib/context/LanguageContext";
 
 const educationLevels = [
   "Post Graduate",
@@ -19,6 +20,7 @@ const educationLevels = [
 
 const StudentStepFour = ({ userData }) => {
   const { fetchUserData, logOut, isLocalhost } = UserAuth();
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [year, setYear] = useState("");
@@ -47,7 +49,7 @@ const StudentStepFour = ({ userData }) => {
 
   const saveData = async () => {
     if (fieldOfStudy.length < 10) {
-      setError("Please enter field of study");
+      setError(t("student_step4_error_field"));
       setTimeout(() => {
         setError("");
       }, 2000);
@@ -55,7 +57,7 @@ const StudentStepFour = ({ userData }) => {
     }
 
     if (institution.length < 2) {
-      setError("Please enter a valid institution");
+      setError(t("student_step4_error_institution"));
       setTimeout(() => {
         setError("");
       }, 2000);
@@ -63,7 +65,7 @@ const StudentStepFour = ({ userData }) => {
     }
 
     if (!year) {
-      setError("Please select graduation year");
+      setError(t("student_step4_error_year"));
       setTimeout(() => {
         setError("");
       }, 2000);
@@ -123,45 +125,45 @@ const StudentStepFour = ({ userData }) => {
               <ProgressIndicator currentStep={5} />
 
               <h1 className="text-base-semibold font-bold sm:text-body1-bold text-primary-dark-blue mt-12">
-                Tell us your education.
+                {t("student_step4_heading")}
               </h1>
               <p className="mt-1 mb-2 text-gray-1 text-small-regular">
-                What's your highest level of education?
+                {t("student_step4_level_question")}
               </p>
               <SingleOptionDropdown
-                label="Your highest level of education?"
+                label={t("student_step4_level_label")}
                 options={educationLevels}
                 selectedValue={educationLevel}
                 onSelect={handleEducationLevelChange}
               />
               <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-                Course or program for your highest education level?
+                {t("student_step4_course_question")}
               </p>
               <div className="">
                 <input
                   type="text"
                   className="simple_textinput"
-                  placeholder="Eg: Bachelor Degree in Linguistic"
+                  placeholder={t("student_step4_course_placeholder")}
                   value={fieldOfStudy}
                   onChange={handleFieldOfStudyChange}
                 />
               </div>
 
               <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-                Name of the institution for your highest education level?
+                {t("student_step4_institution_question")}
               </p>
               <div className="">
                 <input
                   type="text"
                   className="simple_textinput"
-                  placeholder="Eg: University Of Dar Es Salaam"
+                  placeholder={t("student_step4_institution_placeholder")}
                   value={institution}
                   onChange={handleInstitutionChange}
                 />
               </div>
 
               <p className="mt-6 mb-3 text-gray-1 text-small-regular">
-                Which year did you graduate?
+                {t("student_step4_year_question")}
               </p>
               <YearInput onChange={handleYearChange} />
               <div className="flex flex-row space-x-3 mx-auto mt-6">
@@ -181,7 +183,7 @@ const StudentStepFour = ({ userData }) => {
                       width={20}
                       alt="image"
                     />
-                    <p>Back</p>
+                    <p>{t("back")}</p>
                   </button>
                 </div>
                 <div className="w-full">
@@ -200,7 +202,7 @@ const StudentStepFour = ({ userData }) => {
                       width={20}
                       alt="image"
                     />
-                    <p>Next</p>
+                    <p>{t("next")}</p>
                   </button>
                 </div>
               </div>
@@ -210,7 +212,7 @@ const StudentStepFour = ({ userData }) => {
                 </div>
               )}
               <div className=" mx-auto mt-10">
-                <TextButton text={"Log Out"} action={logOut} />
+                <TextButton text={t("log_out")} action={logOut} />
               </div>
             </div>
           </div>

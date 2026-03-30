@@ -7,9 +7,11 @@ import ProgressIndicator from "../shared/ProgressIndicator";
 import ErrorBody from "../shared/ErrorBody";
 import TextButton from "../shared/TextButton";
 import ChoiceChips from "../shared/ChoiceChips";
+import { useLanguage } from "@/lib/context/LanguageContext";
 
 const MentorStepFour = ({ userData }) => {
   const { fetchUserData, logOut, isLocalhost } = UserAuth();
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [trainingChoice, setTrainingChoice] = useState("");
@@ -42,7 +44,7 @@ const MentorStepFour = ({ userData }) => {
 
   const saveData = async () => {
     if (!trainingChoice) {
-      setError("Please select training status");
+      setError(t("mentor_step4_error_training"));
       setTimeout(() => {
         setError("");
       }, 2000);
@@ -50,7 +52,7 @@ const MentorStepFour = ({ userData }) => {
     }
 
     if (trainingChoice === "Yes" && trainingDesc.length < 1) {
-      setError("Please detail the training");
+      setError(t("mentor_step4_error_training_detail"));
       setTimeout(() => {
         setError("");
       }, 2000);
@@ -58,7 +60,7 @@ const MentorStepFour = ({ userData }) => {
     }
 
     if (!experienceChoice) {
-      setError("Please select experience status");
+      setError(t("mentor_step4_error_experience"));
       setTimeout(() => {
         setError("");
       }, 2000);
@@ -66,7 +68,7 @@ const MentorStepFour = ({ userData }) => {
     }
 
     if (experienceChoice === "Yes" && experienceDesc.length < 1) {
-      setError("Please detail your experience");
+      setError(t("mentor_step4_error_experience_detail"));
       setTimeout(() => {
         setError("");
       }, 2000);
@@ -126,15 +128,17 @@ const MentorStepFour = ({ userData }) => {
               <ProgressIndicator currentStep={5} />
 
               <h1 className="text-base-semibold font-bold sm:text-body1-bold text-primary-dark-blue mt-12">
-                Tell us about your skills.
+                {t("mentor_step4_heading")}
               </h1>
               <p className="mt-1 mb-2 text-gray-1 text-small-regular">
-                Have you attended any professional training in coaching and
-                mentorship skills? If yes, please describe the details.
+                {t("mentor_step4_training_question")}
               </p>
               <div className="">
                 <ChoiceChips
-                  choices={["Yes", "No"]}
+                  choices={[
+                    { label: t("yes"), value: "Yes" },
+                    { label: t("no"),  value: "No" },
+                  ]}
                   selectedChoice={trainingChoice}
                   onSelectChoice={setTrainingChoice}
                 />
@@ -143,14 +147,14 @@ const MentorStepFour = ({ userData }) => {
               {trainingChoice === "Yes" && (
                 <div>
                   <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-                    Provide details of the training ( course, award, year)
+                    {t("mentor_step4_training_detail_label")}
                   </p>
                   <div className="">
                     <textarea
                       rows={3}
                       className="simple_textinput max-h-32 min-h-24"
                       defaultValue={""}
-                      placeholder="Description"
+                      placeholder={t("description_placeholder")}
                       value={trainingDesc}
                       onChange={handleTrainingExplanationChange}
                     />
@@ -159,12 +163,14 @@ const MentorStepFour = ({ userData }) => {
               )}
 
               <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-                Do you have any experience in business or career coaching? If
-                Yes, please indicate for how long and in what areas.
+                {t("mentor_step4_experience_question")}
               </p>
               <div className="">
                 <ChoiceChips
-                  choices={["Yes", "No"]}
+                  choices={[
+                    { label: t("yes"), value: "Yes" },
+                    { label: t("no"),  value: "No" },
+                  ]}
                   selectedChoice={experienceChoice}
                   onSelectChoice={setExperienceChoice}
                 />
@@ -173,14 +179,14 @@ const MentorStepFour = ({ userData }) => {
               {experienceChoice === "Yes" && (
                 <div>
                   <p className="mt-5 mb-2 text-gray-1 text-small-regular">
-                    Please describe your experience and the area of experience.
+                    {t("mentor_step4_experience_detail_label")}
                   </p>
                   <div className="">
                     <textarea
                       rows={3}
                       className="simple_textinput max-h-32 min-h-24"
                       defaultValue={""}
-                      placeholder="Description"
+                      placeholder={t("description_placeholder")}
                       value={experienceDesc}
                       onChange={handleExperienceChange}
                     />
@@ -205,7 +211,7 @@ const MentorStepFour = ({ userData }) => {
                       width={20}
                       alt="image"
                     />
-                    <p>Back</p>
+                    <p>{t("back")}</p>
                   </button>
                 </div>
                 <div className="w-full">
@@ -224,7 +230,7 @@ const MentorStepFour = ({ userData }) => {
                       width={20}
                       alt="image"
                     />
-                    <p>Next</p>
+                    <p>{t("next")}</p>
                   </button>
                 </div>
               </div>
@@ -234,7 +240,7 @@ const MentorStepFour = ({ userData }) => {
                 </div>
               )}
               <div className=" mx-auto mt-10">
-                <TextButton text={"Log Out"} action={logOut} />
+                <TextButton text={t("log_out")} action={logOut} />
               </div>
             </div>
           </div>
