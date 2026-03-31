@@ -1,0 +1,513 @@
+# Businesses Applications Approval Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Add a "Businesses' Applications" approval box to the admin dashboard so admins can approve Entrepreneur/MSME users the same way they approve Students and Mentors.
+
+**Architecture:** Create a new `AdminNewEntrepreneurs` component modeled after `AdminNewMentors`, querying Firestore for `user_type == "Entrepreneur"` + `user_profile_setup_step == "6"`. Approval sets `user_profile_setup_step: "10"` and `user_verified: true`. Add the box to the admin dashboard in `app/(root)/page.jsx`.
+
+**Tech Stack:** Next.js 14 (App Router), Firebase Firestore, Tailwind CSS, DaisyUI
+
+---
+
+### Task 1: Create AdminNewEntrepreneurs component
+
+**Files:**
+- Create: `components/admin/AdminNewEntrepreneurs.jsx`
+
+> No test suite is configured for this project. Skip test steps.
+
+- [ ] **Step 1: Create the component file**
+
+Create `components/admin/AdminNewEntrepreneurs.jsx` with the following content:
+
+```jsx
+import {
+  collection,
+  doc,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  startAfter,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { db } from "@/lib/firebase/firebase";
+import Image from "next/image";
+import RingLoader from "../shared/RingLoader";
+import EmptyState from "../shared/EmptyState";
+import calculateTimeAgo from "@/lib/actions/calculateTimeAgo";
+
+const UsersList = ({ data, userData, fetchUserData }) => {
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (selectedPost) {
+      const dialog = document.getElementById("entrepreneur_modal");
+      if (dialog) {
+        dialog.showModal();
+      }
+    }
+  }, [selectedPost]);
+
+  const handlePostClick = (post) => {
+    setSelectedPost(post);
+  };
+
+  const handleClose = () => {
+    setSelectedPost(null);
+    const dialog = document.getElementById("entrepreneur_modal");
+    if (dialog) {
+      dialog.close();
+    }
+  };
+
+  const handleApprove = async () => {
+    setLoading(true);
+    try {
+      const userRef = doc(db, "Users", selectedPost.user_id);
+      await updateDoc(userRef, {
+        user_profile_setup_step: "10",
+        user_verified: true,
+      });
+      fetchUserData(userData.user_id);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error updating data:", error);
+    }
+  };
+
+  return (
+    <div className=" divide-y">
+      {data.map((post) => (
+        <div key={post.id}>
+          <div
+            className="flex flex-row items-start w-full py-2.5 px-1.5 hover:bg-slate-200 hover:cursor-pointer text-start space-x-2"
+            onClick={() => handlePostClick(post)}
+          >
+            <Image
+              alt="image"
+              src={post.user_image}
+              height={512}
+              width={512}
+              className="h-16 w-16 aspect-square rounded-md object-cover object-center"
+            />
+            <div>
+              <h6 className="text-small-regular font-medium tracking-normal text-slate-700 line-clamp-1">
+                {post.user_full_name}
+              </h6>
+              <p className="text-small-regular antialiased font-normal text-gray-700 line-clamp-2">
+                {post.user_bio}
+              </p>
+            </div>
+          </div>
+          {selectedPost && (
+            <dialog id="entrepreneur_modal" className="modal">
+              <div className="modal-box">
+                <div className="flex flex-row justify-center">
+                  <div className="flex flex-col items-center">
+                    <div className=" flex w-24 h-24">
+                      <Image
+                        className="w-24 h-24 rounded-full cursor-pointer object-cover border-2 border-primary-light/40"
+                        src={selectedPost.user_image}
+                        alt="image profile"
+                        height={512}
+                        width={512}
+                      />
+                    </div>
+                    <h4 className="text-slate-800 text-base-medium font-bold mt-2 tracking-wide">
+                      {selectedPost.user_full_name}
+                    </h4>
+                    <p className="text-slate-500 text-tiny-regular font-bold tracking-wide">
+                      {selectedPost.user_type} Account
+                    </p>
+                    <p className="text-subtle-regular text-center mt-2 tracking-wide text-slate-600">
+                      {selectedPost.user_bio}
+                    </p>
+                  </div>
+                </div>
+
+                {/* table */}
+                <p className="mt-4 mb-1 text-small-medium">Profile details</p>
+                <table className="table-auto border border-slate-200 w-full">
+                  <thead className="border-b border-slate-200 text-small-regular">
+                    <tr>
+                      <th className="border-e border-slate-200 px-3 py-1.5 text-start">
+                        Description
+                      </th>
+                      <th className=" px-3 py-1.5 text-start">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-subtle-regular">
+                    <tr className="border-b border-slate-200">
+                      <td className=" border-e border-neutral-200 px-3 py-1.5">
+                        Sex
+                      </td>
+                      <td className="px-3 py-1.5">{selectedPost.user_sex}</td>
+                    </tr>
+                    <tr className="border-b border-slate-200">
+                      <td className=" border-e border-neutral-200 px-3 py-1.5">
+                        Region
+                      </td>
+                      <td className="px-3 py-1.5">{selectedPost.user_region}</td>
+                    </tr>
+                    <tr className="border-b border-slate-200">
+                      <td className=" border-e border-neutral-200 px-3 py-1.5">
+                        District
+                      </td>
+                      <td className="px-3 py-1.5">{selectedPost.user_district}</td>
+                    </tr>
+                    <tr className="border-b border-slate-200">
+                      <td className=" border-e border-neutral-200 px-3 py-1.5">
+                        Business name
+                      </td>
+                      <td className="px-3 py-1.5">
+                        {selectedPost.user_highest_institution_name}
+                      </td>
+                    </tr>
+                    <tr className="border-b border-slate-200">
+                      <td className=" border-e border-neutral-200 px-3 py-1.5">
+                        Business sector
+                      </td>
+                      <td className="px-3 py-1.5">
+                        {selectedPost.user_preferred_sector_to_specialize}
+                      </td>
+                    </tr>
+                    <tr className="border-b border-slate-200">
+                      <td className=" border-e border-neutral-200 px-3 py-1.5">
+                        Formalization status
+                      </td>
+                      <td className="px-3 py-1.5">
+                        {selectedPost.user_business_is_formalized}
+                      </td>
+                    </tr>
+                    <tr className="border-b border-slate-200">
+                      <td className=" border-e border-neutral-200 px-3 py-1.5">
+                        Years of operation
+                      </td>
+                      <td className="px-3 py-1.5">
+                        {selectedPost.user_business_started}
+                      </td>
+                    </tr>
+                    <tr className="border-b border-slate-200">
+                      <td className=" border-e border-neutral-200 px-3 py-1.5">
+                        Number of employees
+                      </td>
+                      <td className="px-3 py-1.5">
+                        {selectedPost.user_business_plan}
+                      </td>
+                    </tr>
+                    <tr className="border-b border-slate-200">
+                      <td className=" border-e border-neutral-200 px-3 py-1.5">
+                        Monthly revenue
+                      </td>
+                      <td className="px-3 py-1.5">
+                        {selectedPost.user_monthly_income}
+                      </td>
+                    </tr>
+                    <tr className="border-b border-slate-200">
+                      <td className=" border-e border-neutral-200 px-3 py-1.5">
+                        Business challenges
+                      </td>
+                      <td className="px-3 py-1.5">
+                        {selectedPost.user_areas_of_interest}
+                      </td>
+                    </tr>
+                    <tr className="border-b border-slate-200">
+                      <td className=" border-e border-neutral-200 px-3 py-1.5">
+                        Has received support
+                      </td>
+                      <td className="px-3 py-1.5">
+                        {selectedPost.user_has_received_support}
+                        {selectedPost.user_mentorship_training_detail
+                          ? ` — ${selectedPost.user_mentorship_training_detail}`
+                          : ""}
+                      </td>
+                    </tr>
+                    <tr className="border-b border-slate-200">
+                      <td className=" border-e border-neutral-200 px-3 py-1.5">
+                        Support needed
+                      </td>
+                      <td className="px-3 py-1.5">
+                        {selectedPost.user_available_times}
+                      </td>
+                    </tr>
+                    <tr className="border-b border-slate-200">
+                      <td className=" border-e border-neutral-200 px-3 py-1.5">
+                        TIN
+                      </td>
+                      <td className="px-3 py-1.5">
+                        {selectedPost.user_current_mo || "Not provided"}
+                      </td>
+                    </tr>
+                    <tr className="border-b border-slate-200">
+                      <td className=" border-e border-neutral-200 px-3 py-1.5">
+                        Disability
+                      </td>
+                      <td className="px-3 py-1.5">
+                        {selectedPost.user_has_disability}
+                        {selectedPost.user_disability_description
+                          ? ` — ${selectedPost.user_disability_description}`
+                          : ""}
+                      </td>
+                    </tr>
+                    <tr className="border-b border-slate-200">
+                      <td className=" border-e border-neutral-200 px-3 py-1.5">
+                        Account creation
+                      </td>
+                      <td className="px-3 py-1.5">
+                        {calculateTimeAgo(selectedPost.user_creation_date)}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className=" border-e border-neutral-200 px-3 py-1.5">
+                        Last seen
+                      </td>
+                      <td className="px-3 py-1.5">
+                        {calculateTimeAgo(selectedPost.user_last_interaction)}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                {/* table */}
+
+                <div className="flex flex-row items-center justify-end w-full mt-5 space-x-4 ">
+                  <div className="">
+                    <button
+                      className=" text-slate-500 text-small-regular outline-none tracking-wide border rounded-lg px-3 py-1.5"
+                      onClick={handleClose}
+                    >
+                      Close
+                    </button>
+                  </div>
+                  <button
+                    className="text-small-regular text-white bg-primary-deep-light rounded-lg px-3 py-1.5"
+                    onClick={handleApprove}
+                  >
+                    <p>Approve</p>
+                  </button>
+                </div>
+              </div>
+            </dialog>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const AdminNewEntrepreneurs = ({ userData, fetchUserData }) => {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [lastDoc, setLastDoc] = useState(null);
+  const [firstDoc, setFirstDoc] = useState(null);
+  const [isFirstPage, setIsFirstPage] = useState(true);
+
+  const getUsers = async (next = true) => {
+    const dbInstance = collection(db, `Users`);
+    let q;
+    if (next) {
+      q = query(
+        dbInstance,
+        where("user_type", "==", "Entrepreneur"),
+        where("user_profile_setup_step", "==", "6"),
+        orderBy("user_creation_date", "desc"),
+        startAfter(lastDoc || 0),
+        limit(4)
+      );
+    } else {
+      q = query(
+        dbInstance,
+        where("user_type", "==", "Entrepreneur"),
+        where("user_profile_setup_step", "==", "6"),
+        orderBy("user_creation_date", "desc"),
+        limit(4)
+      );
+    }
+    setLoading(true);
+    try {
+      const data = await getDocs(q);
+      const newData = data.docs.map((item) => ({
+        ...item.data(),
+        id: item.id,
+      }));
+      setUsers(newData);
+      if (data.docs.length > 0) {
+        setLastDoc(data.docs[data.docs.length - 1]);
+        setFirstDoc(data.docs[0]);
+      }
+      setIsFirstPage(!next);
+    } catch (error) {
+      console.error("Error fetching Firestore data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (userData) {
+      getUsers(false);
+    }
+  }, [userData]);
+
+  const handleNext = () => {
+    if (!loading && users.length == 4) {
+      getUsers(true);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (!loading && !isFirstPage) {
+      getUsers(false);
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-1 px-2 h-full">
+      <div className="flex flex-row justify-between border-b pb-1.5  pt-2">
+        <p className="pl-2 text-base-regular font-bold tracking-wide">
+          Businesses' Applications
+        </p>
+        <div className="flex flex-row space-x-2 pr-2">
+          <Image
+            className={`h-6 w-6 ${
+              loading || isFirstPage ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
+            src={
+              loading || isFirstPage
+                ? "/icons/previous-inactive.svg"
+                : "/icons/previous-active.svg"
+            }
+            height={200}
+            width={200}
+            alt="arrow icon"
+            onClick={handlePrevious}
+            disabled={loading || isFirstPage}
+          />
+          <Image
+            className={`h-6 w-6 ${
+              loading || users.length < 4
+                ? "cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
+            src={
+              loading || users.length < 4
+                ? "/icons/next-inactive.svg"
+                : "/icons/next-active.svg"
+            }
+            height={200}
+            width={200}
+            alt="arrow icon"
+            onClick={handleNext}
+            disabled={loading}
+          />
+        </div>
+      </div>
+
+      {loading && (
+        <div className="flex flex-col justify-center h-full">
+          <RingLoader />
+        </div>
+      )}
+      {!loading && users.length === 0 && (
+        <div className="flex flex-col justify-center h-full">
+          <EmptyState
+            title={"No Businesses Found"}
+            desc={
+              "Looks like there are no new business applications yet. Once new entrepreneurs sign up they will appear here."
+            }
+          />
+        </div>
+      )}
+      {!loading && users.length > 0 && (
+        <UsersList
+          data={users}
+          userData={userData}
+          fetchUserData={fetchUserData}
+        />
+      )}
+    </div>
+  );
+};
+
+export default AdminNewEntrepreneurs;
+```
+
+- [ ] **Step 2: Commit the new component**
+
+```bash
+git add components/admin/AdminNewEntrepreneurs.jsx
+git commit -m "feat: add AdminNewEntrepreneurs component for business application approvals"
+```
+
+---
+
+### Task 2: Add Businesses' Applications box to admin dashboard
+
+**Files:**
+- Modify: `app/(root)/page.jsx`
+
+- [ ] **Step 1: Add import at the top of `app/(root)/page.jsx`**
+
+After the existing import on line 23:
+```js
+import AdminTrashedMentors from "@/components/admin/AdminTrashedMentors";
+```
+
+Add:
+```js
+import AdminNewEntrepreneurs from "@/components/admin/AdminNewEntrepreneurs";
+```
+
+- [ ] **Step 2: Add the Businesses' Applications box to the admin dashboard grid**
+
+In `app/(root)/page.jsx`, locate the second grid section (lines 117–127) which currently contains `AdminNewMentors` and `AdminAllAdmins`:
+
+```jsx
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8">
+          <div className="h-96 rounded-xl border-2 border-slate-200 bg-white">
+            <AdminNewMentors
+              userData={userData}
+              fetchUserData={fetchUserData}
+            />
+          </div>
+          <div className="h-96 rounded-xl border-2 border-slate-200 bg-white">
+            <AdminAllAdmins userData={userData} fetchUserData={fetchUserData} />
+          </div>
+        </div>
+```
+
+Replace it with a version that adds a new row for Businesses' Applications after it:
+
+```jsx
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8">
+          <div className="h-96 rounded-xl border-2 border-slate-200 bg-white">
+            <AdminNewMentors
+              userData={userData}
+              fetchUserData={fetchUserData}
+            />
+          </div>
+          <div className="h-96 rounded-xl border-2 border-slate-200 bg-white">
+            <AdminAllAdmins userData={userData} fetchUserData={fetchUserData} />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8">
+          <div className="h-96 rounded-xl border-2 border-slate-200 bg-white">
+            <AdminNewEntrepreneurs
+              userData={userData}
+              fetchUserData={fetchUserData}
+            />
+          </div>
+        </div>
+```
+
+- [ ] **Step 3: Commit the dashboard update**
+
+```bash
+git add app/\(root\)/page.jsx
+git commit -m "feat: add Businesses' Applications box to admin dashboard"
+```

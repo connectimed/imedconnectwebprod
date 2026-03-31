@@ -7,16 +7,18 @@ import { doc, updateDoc } from "firebase/firestore";
 import ProgressIndicator from "../shared/ProgressIndicator";
 import ErrorBody from "./ErrorBody";
 import TextButton from "../shared/TextButton";
+import { useLanguage } from "@/lib/context/LanguageContext";
 
 const AccountDecider = ({ userData }) => {
   const { firebaseUser, fetchUserData, logOut, isLocalhost } = UserAuth();
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [selectedType, setSelectedType] = useState("");
   const [error, setError] = useState("");
 
   const saveData = async () => {
     if (!selectedType) {
-      setError("Please select an account type");
+      setError(t("account_decider_error"));
       setTimeout(() => {
         setError("");
       }, 2000);
@@ -63,11 +65,11 @@ const AccountDecider = ({ userData }) => {
               <ProgressIndicator currentStep={2} />
 
               <h1 className="text-base-semibold font-bold sm:text-body1-bold text-primary-dark-blue mt-10">
-                Choose account!
+                {t("account_decider_heading")}
               </h1>
 
               <p className="mt-1 mb-4 text-gray-1 text-small-regular">
-                Please select your account type carefully.
+                {t("account_decider_subtitle")}
               </p>
               <div
                 className={`flex flex-row border border-slate-300 rounded-lg py-2 px-3 cursor-pointer ${
@@ -77,11 +79,10 @@ const AccountDecider = ({ userData }) => {
               >
                 <div className="">
                   <p className=" text-small-regular font-bold text-black">
-                    Youth Graduate
+                    {t("account_student_title")}
                   </p>
                   <p className=" text-small-regular text-gray-600">
-                    Connect with experienced mentors and access diverse
-                    educational materials.
+                    {t("account_student_desc")}
                   </p>
                 </div>
                 <Image
@@ -105,11 +106,10 @@ const AccountDecider = ({ userData }) => {
               >
                 <div className="">
                   <p className=" text-small-regular font-bold text-black">
-                    Mentor
+                    {t("account_mentor_title")}
                   </p>
                   <p className=" text-small-regular text-gray-600">
-                    Join the community to share your knowledge and inspire the
-                    next generation.
+                    {t("account_mentor_desc")}
                   </p>
                 </div>
                 <Image
@@ -133,10 +133,10 @@ const AccountDecider = ({ userData }) => {
               >
                 <div className="">
                   <p className=" text-small-regular font-bold text-black">
-                    Entrepreneur / MSME
+                    {t("account_entrepreneur_title")}
                   </p>
                   <p className=" text-small-regular text-gray-600">
-                    Access resources and connect with support networks to grow your business.
+                    {t("account_entrepreneur_desc")}
                   </p>
                 </div>
                 <Image
@@ -168,7 +168,7 @@ const AccountDecider = ({ userData }) => {
                       width={20}
                       alt="image"
                     />
-                    <p>Next</p>
+                    <p>{t("next")}</p>
                   </button>
                 </div>
               </div>
@@ -178,7 +178,7 @@ const AccountDecider = ({ userData }) => {
                 </div>
               )}
               <div className=" mx-auto mt-10">
-                <TextButton text={"Log Out"} action={logOut} />
+                <TextButton text={t("log_out")} action={logOut} />
               </div>
             </div>
           </div>

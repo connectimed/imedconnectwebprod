@@ -7,9 +7,11 @@ import { doc, updateDoc } from "firebase/firestore";
 import ErrorBody from "../shared/ErrorBody";
 import TextButton from "./TextButton";
 import ProgressIndicator from "../shared/ProgressIndicator";
+import { useLanguage } from "@/lib/context/LanguageContext";
 
 const VerifyPhoneNumber = ({ userData }) => {
   const { firebaseUser, fetchUserData, logOut, isLocalhost } = UserAuth();
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [error, setError] = useState("");
@@ -60,7 +62,7 @@ const VerifyPhoneNumber = ({ userData }) => {
     if (newValue.length === 6 && newValue === otp) {
       recordUserData(userData.user_id);
     } else if (newValue.length === 6 && newValue !== otp) {
-      setError("Wrong code");
+      setError(t("verify_wrong_code"));
       setTimeout(() => {
         setError("");
       }, 2000);
@@ -135,20 +137,16 @@ const VerifyPhoneNumber = ({ userData }) => {
               <ProgressIndicator currentStep={1} />
 
               <h1 className="text-base-semibold font-bold sm:text-body1-bold text-primary-dark-blue mt-16">
-                Verify Phone Number!
+                {t("verify_heading")}
               </h1>
 
               {isCodeSent ? (
                 <p className="mt-2 text-gray-1 text-small-regular">
-                  We have sent a one time code to +{userData.user_phone}. <br />
-                  Please fill in the code to continue. If you din't receive the
-                  code you can send again in 60 seconds.
+                  {t("verify_sent_body_prefix")}+{userData.user_phone}{t("verify_sent_body_suffix")}
                 </p>
               ) : (
                 <p className="mt-2 text-gray-1 text-small-regular">
-                  Secure your account with a quick verification. <br />
-                  We'll send a one time code to your phone for added security.
-                  Click send code to send the code to +{userData.user_phone}.
+                  {t("verify_pre_send_body")}+{userData.user_phone}.
                 </p>
               )}
               <div className="mx-auto mt-6">
@@ -171,8 +169,8 @@ const VerifyPhoneNumber = ({ userData }) => {
                         onClick={handleResendClick}
                       >
                         {countdown > 0
-                          ? `Resend in ${countdown} seconds`
-                          : "Click to resend"}
+                          ? `${t("verify_resend_in")} ${countdown} ${t("verify_seconds")}`.trim()
+                          : t("verify_click_resend")}
                       </p>
                     </div>
                   </div>
@@ -193,7 +191,7 @@ const VerifyPhoneNumber = ({ userData }) => {
                         width={20}
                         alt="image"
                       />
-                      <p>Send Code</p>
+                      <p>{t("verify_send_code_btn")}</p>
                     </button>
                   </div>
                 )}
@@ -204,7 +202,7 @@ const VerifyPhoneNumber = ({ userData }) => {
                 </div>
               )}
               <div className=" mx-auto mt-28">
-                <TextButton text={"Log Out"} action={logOut} />
+                <TextButton text={t("log_out")} action={logOut} />
               </div>
             </div>
           </div>
