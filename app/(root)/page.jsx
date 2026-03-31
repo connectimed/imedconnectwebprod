@@ -21,6 +21,7 @@ import StudentsMyExams from "@/components/student/StudentsMyExams";
 import AdminExams from "@/components/admin/AdminExams";
 import AdminTrashedStudents from "@/components/admin/AdminTrashedStudents";
 import AdminTrashedMentors from "@/components/admin/AdminTrashedMentors";
+import AdminNewEntrepreneurs from "@/components/admin/AdminNewEntrepreneurs";
 
 export default function Home() {
   const { authLoading, userData, firebaseUser, fetchUserData, fireLoaded } =
@@ -123,6 +124,15 @@ export default function Home() {
           </div>
           <div className="h-96 rounded-xl border-2 border-slate-200 bg-white">
             <AdminAllAdmins userData={userData} fetchUserData={fetchUserData} />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8">
+          <div className="h-96 rounded-xl border-2 border-slate-200 bg-white">
+            <AdminNewEntrepreneurs
+              userData={userData}
+              fetchUserData={fetchUserData}
+            />
           </div>
         </div>
 
