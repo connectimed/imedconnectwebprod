@@ -98,7 +98,8 @@ const page = ({ params }) => {
         />
       )}
 
-      {userData.user_type === "Student" &&
+      {(userData.user_type === "Student" ||
+        userData.user_type === "Entrepreneur") &&
         !userData.user_modules.includes(content.module_id) && (
           <StudentEnrollToModule
             userData={userData}
@@ -173,7 +174,8 @@ const page = ({ params }) => {
             />
           )}
 
-          {userData.user_type === "Student" && (
+          {(userData.user_type === "Student" ||
+            userData.user_type === "Entrepreneur") && (
             <StudentTopics userData={userData} moduleId={content.module_id} />
           )}
         </div>
@@ -199,7 +201,8 @@ const page = ({ params }) => {
         </div>
       )}
 
-      {userData.user_type === "Student" &&
+      {(userData.user_type === "Student" ||
+        userData.user_type === "Entrepreneur") &&
         userData.user_modules.includes(content.module_id) &&
         content.module_has_exam && (
           <div className="mt-6">

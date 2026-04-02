@@ -92,6 +92,32 @@ export default function Home() {
     );
   }
 
+  if (userData.user_type === "Entrepreneur") {
+    return (
+      <div className="flex flex-col gap-8">
+        <StudentHero userData={userData} />
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8">
+          <div className="h-96 rounded-xl border-2 border-slate-200 bg-white">
+            <NoticeBoard userData={userData} />
+          </div>
+          <div className="h-96 rounded-xl border-2 border-slate-200 bg-white">
+            <MyModules userData={userData} />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8">
+          <div className="h-96 rounded-xl border-2 border-slate-200 bg-white">
+            <StudentsMyMentors
+              userData={userData}
+              fetchUserData={fetchUserData}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (userData.user_type === "Admin") {
     return (
       <div className="flex flex-col gap-4 md:gap-6">

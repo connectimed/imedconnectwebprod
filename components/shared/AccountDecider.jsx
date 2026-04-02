@@ -100,33 +100,6 @@ const AccountDecider = ({ userData }) => {
 
               <div
                 className={`flex flex-row border border-slate-300 rounded-lg py-2 px-3 mt-4 cursor-pointer ${
-                  selectedType === "Mentor" ? "border-primary-light" : ""
-                }`}
-                onClick={() => handleSelectType("Mentor")}
-              >
-                <div className="">
-                  <p className=" text-small-regular font-bold text-black">
-                    {t("account_mentor_title")}
-                  </p>
-                  <p className=" text-small-regular text-gray-600">
-                    {t("account_mentor_desc")}
-                  </p>
-                </div>
-                <Image
-                  className="h-4 w-4"
-                  src={
-                    selectedType === "Mentor"
-                      ? "/icons/selected.svg"
-                      : "/icons/unselected.svg"
-                  }
-                  height={512}
-                  width={512}
-                  alt="icon"
-                />
-              </div>
-
-              <div
-                className={`flex flex-row border border-slate-300 rounded-lg py-2 px-3 mt-4 cursor-pointer ${
                   selectedType === "Entrepreneur" ? "border-primary-light" : ""
                 }`}
                 onClick={() => handleSelectType("Entrepreneur")}
@@ -143,6 +116,33 @@ const AccountDecider = ({ userData }) => {
                   className="h-4 w-4"
                   src={
                     selectedType === "Entrepreneur"
+                      ? "/icons/selected.svg"
+                      : "/icons/unselected.svg"
+                  }
+                  height={512}
+                  width={512}
+                  alt="icon"
+                />
+              </div>
+
+              <div
+                className={`flex flex-row border border-slate-300 rounded-lg py-2 px-3 mt-4 cursor-pointer ${
+                  selectedType === "Mentor" ? "border-primary-light" : ""
+                }`}
+                onClick={() => handleSelectType("Mentor")}
+              >
+                <div className="">
+                  <p className=" text-small-regular font-bold text-black">
+                    {t("account_mentor_title")}
+                  </p>
+                  <p className=" text-small-regular text-gray-600">
+                    {t("account_mentor_desc")}
+                  </p>
+                </div>
+                <Image
+                  className="h-4 w-4"
+                  src={
+                    selectedType === "Mentor"
                       ? "/icons/selected.svg"
                       : "/icons/unselected.svg"
                   }

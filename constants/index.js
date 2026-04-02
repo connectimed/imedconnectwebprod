@@ -41,6 +41,12 @@ export const sidebarLinks = [
     route: "/graduates",
     label: "Youth Graduates",
   },
+  {
+    imgURL: "/icons/exam-active.svg",
+    darkImgURL: "/icons/exam-inactive.svg",
+    route: "/entrepreneurs",
+    label: "Entrepreneurs",
+  },
 
   {
     imgURL: "/icons/reference-active.svg",

@@ -42,7 +42,7 @@ const DateInput = ({
         value={day}
         onChange={(e) => onDayChange(e.target.value)}
         placeholder="DD"
-        className=" w-20 py-2 border rounded-md border-gray-300 ps-4 pe-2 text-slate-700 focus:border-primary-light placeholder:text-slate-400 outline-none"
+        className=" w-20 py-2 border rounded-md border-gray-300 bg-white ps-4 pe-2 text-slate-700 focus:border-primary-light placeholder:text-slate-400 outline-none"
         min="1"
         max="31"
       />
@@ -51,7 +51,7 @@ const DateInput = ({
         value={month}
         onChange={handleMonthChange}
         placeholder="MM"
-        className="w-20 py-2 border rounded-md border-gray-300 ps-4 pe-2 text-slate-700 focus:border-primary-light placeholder:text-slate-400 outline-none"
+        className="w-20 py-2 border rounded-md border-gray-300 bg-white ps-4 pe-2 text-slate-700 focus:border-primary-light placeholder:text-slate-400 outline-none"
         min="1"
         max="12"
       />
@@ -60,7 +60,7 @@ const DateInput = ({
         value={year}
         onChange={handleYearChange}
         placeholder="YYYY"
-        className="w-24 py-2 border rounded-md border-gray-300 ps-4 pe-2 text-slate-700 focus:border-primary-light placeholder:text-slate-400 outline-none"
+        className="w-24 py-2 border rounded-md border-gray-300 bg-white ps-4 pe-2 text-slate-700 focus:border-primary-light placeholder:text-slate-400 outline-none"
         min="1900"
         max="2100"
       />
